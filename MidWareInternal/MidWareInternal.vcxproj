@@ -173,7 +173,7 @@
     <ClInclude Include="includes\kiero\minhook\src\trampoline.h" />
     <ClInclude Include="src\gui\gui.h" />
     <ClInclude Include="src\hooks\hooks.h" />
-    <ClInclude Include="src\utils\includes.h" />
+    <ClInclude Include="src\utils\helpers.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="includes\kiero\minhook\dll_resources\MinHook.def" />

@@ -95,7 +95,7 @@
     <ClInclude Include="includes\kiero\kiero.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\utils\includes.h">
+    <ClInclude Include="src\utils\helpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="includes\kiero\minhook\include\MinHook.h">
