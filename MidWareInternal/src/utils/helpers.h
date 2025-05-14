@@ -1,12 +1,17 @@
 #pragma once
-#include <Windows.h>
+#include "imgui.h"
+#include "imgui_impl_dx11.h"
+#include "imgui_impl_win32.h"
+#include "kiero.h"
+#include <chrono>
+#include <cstdlib>
 #include <d3d11.h>
 #include <dxgi.h>
+#include <stdexcept>
+#include <string>
 #include <thread>
-#include <chrono>
-#include "imgui.h"
-#include "imgui_impl_win32.h"
-#include "imgui_impl_dx11.h"
-#include "kiero.h"
+#include <Windows.h>
 
-// helper functions, currently I have none
+std::string WideToNarrow(const std::wstring& wstr);
+
+uintptr_t GetPointer(uintptr_t base, const std::vector<uintptr_t>& offsets);

@@ -71,10 +71,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(ProjectDir)build</OutDir>
+    <OutDir>$(ProjectDir)build\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(ProjectDir)build</OutDir>
+    <OutDir>$(ProjectDir)build\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -149,9 +149,11 @@
     <ClCompile Include="includes\kiero\minhook\src\hde\hde64.c" />
     <ClCompile Include="includes\kiero\minhook\src\hook.c" />
     <ClCompile Include="includes\kiero\minhook\src\trampoline.c" />
+    <ClCompile Include="src\features\weapon.cpp" />
     <ClCompile Include="src\gui\gui.cpp" />
     <ClCompile Include="src\hooks\hooks.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\utils\helpers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\imgui\imconfig.h" />
@@ -171,9 +173,11 @@
     <ClInclude Include="includes\kiero\minhook\src\hde\table32.h" />
     <ClInclude Include="includes\kiero\minhook\src\hde\table64.h" />
     <ClInclude Include="includes\kiero\minhook\src\trampoline.h" />
+    <ClInclude Include="src\features\weapon.h" />
     <ClInclude Include="src\gui\gui.h" />
     <ClInclude Include="src\hooks\hooks.h" />
     <ClInclude Include="src\utils\helpers.h" />
+    <ClInclude Include="src\utils\offsets.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="includes\kiero\minhook\dll_resources\MinHook.def" />

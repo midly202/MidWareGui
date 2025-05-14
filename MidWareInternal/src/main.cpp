@@ -1,8 +1,29 @@
-#include "utils/helpers.h"
+#include "features/weapon.h"
 #include "hooks/hooks.h"
+#include "utils/helpers.h"
 
 bool shouldUnload = false;
 HMODULE g_hModule = NULL;
+uintptr_t baseAddress = (uintptr_t)GetModuleHandleA("RainbowSix.exe");
+
+std::wstring currentWeaponName = L"";
+
+DWORD WINAPI CheatThread(LPVOID)
+{
+    while (!shouldUnload)
+    {
+        try {
+            auto result = readWeaponData();
+            currentWeaponName = result;
+        }
+        catch (...) {
+            OutputDebugStringA("Caught C++ exception in readWeaponData\n");
+        }
+        Sleep(10);
+    }
+    return 0;
+    return 0;
+}
 
 DWORD WINAPI MonitorKeys(LPVOID)
 {
@@ -25,6 +46,7 @@ DWORD WINAPI SetupHook(LPVOID instance)
 
     kiero::bind(8, (void**)&oPresent, hkPresent);
 
+    CreateThread(nullptr, 0, CheatThread, nullptr, 0, nullptr);
     CreateThread(nullptr, 0, MonitorKeys, nullptr, 0, nullptr);
     return 0;
 }
