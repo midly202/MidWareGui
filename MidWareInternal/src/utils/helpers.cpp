@@ -42,3 +42,33 @@ uintptr_t GetPointer(uintptr_t base, const std::vector<uintptr_t>& offsets)
 	}
 	return addr;
 }
+
+int MapCaliberIDToIndex(uint32_t caliberID)
+{
+    switch (caliberID) {
+    case 3864566559:
+        return 0; // "Regular Rifle"
+    case 1635385480:
+        return 1; // "Regular SMG"
+    case 224916230:
+        return 2; // "Regular Pistol"
+    case 2249646560:
+        return 3; // "Tachanka's DP27"
+    case 54247478:
+        return 4; // "Tachanka's DP27 Turret"
+    case 1216095593:
+        return 5; // "Buck's Skeleton Key"
+    case 3683118896:
+        return 6; // "Kali's Sniper"
+    case 2097060903:
+        return 7; // "Maverick's Blowtorch"
+    case 1800674797:
+        return 8; // "Maestro's Turret"
+    case 1586594484:
+        return 9; // "BOSG"
+    case 1314319139:
+        return 10; // "Bailiff"
+    default:
+        return 11; // fallback to "Regular Rifle"
+    }
+}

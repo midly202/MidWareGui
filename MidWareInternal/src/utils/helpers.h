@@ -20,3 +20,5 @@ extern std::unordered_map<std::wstring, WeaponSettings> weaponSettingsMap;
 std::string WideToNarrow(const std::wstring& wstr);
 
 uintptr_t GetPointer(uintptr_t base, const std::vector<uintptr_t>& offsets);
+
+int MapCaliberIDToIndex(uint32_t caliberID);

@@ -28,5 +28,5 @@ struct WeaponSettings
 	bool boltScript = false;
 	bool knifeReach = false;
 	int recoilReduction = 0;
-	int weaponCaliber = 0; // Read default caliber from game memory
+	int caliberIndex = 0;
 };

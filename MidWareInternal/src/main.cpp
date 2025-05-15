@@ -45,13 +45,18 @@ DWORD WINAPI CheatThread(LPVOID)
                 if (!weaponPtr || weaponPtr < 0x10000)
                     return 1;
 
+                uintptr_t caliberPtr = GetPointer(baseAddress, offsets::CCurrentWeaponCaliber);
+                if (!caliberPtr || caliberPtr < 0x10000)
+                    return 1;
+
                 WeaponComponent* weaponComponent = reinterpret_cast<WeaponComponent*>(weaponPtr);
+                CCurrentWeaponCaliber* gunCaliber = reinterpret_cast<CCurrentWeaponCaliber*>(caliberPtr);
                 
                 weaponSettingsMap[weaponName] = WeaponSettings(); // all toggles false by default
 
                 WeaponSettings& settings = weaponSettingsMap[weaponName];
                 settings.originalAmmoValue = weaponComponent->gunAmmo;
-                //weaponSettingsMap[weaponName].originalAmmoValue = weaponComponent->gunAmmo;
+                settings.caliberIndex = MapCaliberIDToIndex(gunCaliber->GunCaliber);
             }
         }
 

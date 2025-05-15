@@ -27,7 +27,6 @@ void RenderGUI()
     extern std::wstring weaponName;
 
     static bool unlockAll = false;
-    //static bool infiniteAmmo = false;
     static bool rapidFire = false;
     static bool noRecoil = false;
     static bool noSpread = false;
@@ -42,7 +41,11 @@ void RenderGUI()
         "Tachanka's DP27 (Turret)",
         "Buck's Skeleton Key",
         "Kali's Sniper",
-        "Maverick's Blowtorch"
+        "Maverick's Blowtorch",
+        "Maestro's Turret",
+        "BOSG",
+        "Bailiff",
+        "Unknown Caliber"
     };
     static bool boltScript = false;
     static bool knifeReach = false;
@@ -99,35 +102,34 @@ void RenderGUI()
         {
             ImGui::Spacing();
             std::string currentWeaponNameStr = WideToNarrow(weaponName);
-            ImGui::Text(currentWeaponNameStr.c_str());
+            ImGui::Text("Current Weapon: %s", currentWeaponNameStr.c_str());
             ImGui::Spacing();
             ImGui::Checkbox("Infinite Ammo", &weaponSettingsMap[weaponName].infiniteAmmo);
             ImGui::Spacing();
-            ImGui::Checkbox("Rapid Fire", &rapidFire);
+            ImGui::Checkbox("Rapid Fire", &weaponSettingsMap[weaponName].rapidFire);
             ImGui::Spacing();
-            ImGui::Checkbox("No Spread", &noSpread);
+            ImGui::Checkbox("No Spread", &weaponSettingsMap[weaponName].noSpread);
             ImGui::Spacing();
-            ImGui::Checkbox("InstaKill", &instaKill);
+            ImGui::Checkbox("InstaKill", &weaponSettingsMap[weaponName].instaKill);
             ImGui::Spacing();
-            ImGui::Checkbox("Run and Shoot", &runAndShoot);
+            ImGui::Checkbox("Run and Shoot", &weaponSettingsMap[weaponName].runAndShoot);
             ImGui::Spacing();
-            ImGui::Checkbox("Bolt Script", &boltScript);
+            ImGui::Checkbox("Bolt Script", &weaponSettingsMap[weaponName].boltScript);
             ImGui::Spacing();
-            ImGui::Checkbox("Knife Reach", &knifeReach);
+            ImGui::Checkbox("Knife Reach", &weaponSettingsMap[weaponName].knifeReach);
             ImGui::Spacing();
             ImGui::Text("Recoil Reduction Percentage");
-            static int sliderRecoil = 0;
-            ImGui::SliderInt("##Recoil Slider", &sliderRecoil, 0, 100);
+            ImGui::SliderInt("##Recoil Slider", &weaponSettingsMap[weaponName].recoilReduction, 0, 100);
             ImGui::Spacing();
             ImGui::Text("Weapon Caliber");
             // Combo with a nice look for the caliber selection.
-            if (ImGui::BeginCombo("##Caliber Picker", caliberTypes[selectedCaliber]))
+            if (ImGui::BeginCombo("##Caliber Picker", caliberTypes[weaponSettingsMap[weaponName].caliberIndex]))
             {
-                for (int i = 0; i < IM_ARRAYSIZE(caliberTypes); i++)
+                for (int i = 0; i < IM_ARRAYSIZE(caliberTypes) - 1; i++)
                 {
                     bool isSelected = (selectedCaliber == i);
                     if (ImGui::Selectable(caliberTypes[i], isSelected))
-                        selectedCaliber = i;
+                        weaponSettingsMap[weaponName].caliberIndex = i;
                     if (isSelected)
                         ImGui::SetItemDefaultFocus();
                 }

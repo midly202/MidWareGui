@@ -68,16 +68,6 @@ void infiniteAmmo(const std::wstring& weaponName)
 
     WeaponComponent* weaponComponent = reinterpret_cast<WeaponComponent*>(weaponPtr);
 
-    // WeaponSettings& settings = weaponSettingsMap[weaponName];
-
-    /* 
-    
-    Store original ammo once per weapon
-    if (settings.originalAmmoValue == -1)
-        settings.originalAmmoValue = weaponComponent->gunAmmo;
-
-    */
-
     weaponComponent->gunAmmo = 10000;
 }
 
