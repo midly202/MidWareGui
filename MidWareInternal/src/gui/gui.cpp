@@ -24,10 +24,10 @@ void BeginGUIFrame()
 void RenderGUI()
 {
     // Cheat GUI
-    extern std::wstring currentWeaponName;
+    extern std::wstring weaponName;
 
     static bool unlockAll = false;
-    static bool infiniteAmmo = false;
+    //static bool infiniteAmmo = false;
     static bool rapidFire = false;
     static bool noRecoil = false;
     static bool noSpread = false;
@@ -98,10 +98,10 @@ void RenderGUI()
         if (ImGui::BeginTabItem("WEAPON"))
         {
             ImGui::Spacing();
-            std::string currentWeaponNameStr = WideToNarrow(currentWeaponName);
+            std::string currentWeaponNameStr = WideToNarrow(weaponName);
             ImGui::Text(currentWeaponNameStr.c_str());
             ImGui::Spacing();
-            ImGui::Checkbox("Infinite Ammo", &infiniteAmmo);
+            ImGui::Checkbox("Infinite Ammo", &weaponSettingsMap[weaponName].infiniteAmmo);
             ImGui::Spacing();
             ImGui::Checkbox("Rapid Fire", &rapidFire);
             ImGui::Spacing();

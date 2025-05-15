@@ -6,12 +6,16 @@ bool shouldUnload = false;
 HMODULE g_hModule = NULL;
 uintptr_t baseAddress = (uintptr_t)GetModuleHandleA("RainbowSix.exe");
 
-std::wstring currentWeaponName = L"";
+std::wstring weaponName = L"";
+std::wstring lastWeaponName = L"";
+
+std::unordered_map<std::wstring, WeaponSettings> weaponSettingsMap;
 
 DWORD WINAPI CheatThread(LPVOID)
 {
     while (!shouldUnload)
     {
+        /* Testing stability without SEH
         try {
             auto result = readWeaponData();
             currentWeaponName = result;
@@ -19,9 +23,59 @@ DWORD WINAPI CheatThread(LPVOID)
         catch (...) {
             OutputDebugStringA("Caught C++ exception in readWeaponData\n");
         }
-        Sleep(10);
+
+        currentWeaponName = readWeaponData(); crashes consistently
+
+        */
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+
+        auto result = readWeaponData();
+        weaponName = result;
+
+        if (!weaponName.empty() && weaponName != lastWeaponName)
+        {
+            lastWeaponName = weaponName;
+
+            // If this weapon is new, create default settings
+            if (weaponSettingsMap.find(weaponName) == weaponSettingsMap.end())
+            {
+                
+                uintptr_t weaponPtr = GetPointer(baseAddress, offsets::WeaponComponent);
+                if (!weaponPtr || weaponPtr < 0x10000)
+                    return 1;
+
+                WeaponComponent* weaponComponent = reinterpret_cast<WeaponComponent*>(weaponPtr);
+                
+                weaponSettingsMap[weaponName] = WeaponSettings(); // all toggles false by default
+
+                WeaponSettings& settings = weaponSettingsMap[weaponName];
+                settings.originalAmmoValue = weaponComponent->gunAmmo;
+                //weaponSettingsMap[weaponName].originalAmmoValue = weaponComponent->gunAmmo;
+            }
+        }
+
+        const auto& settings = weaponSettingsMap[weaponName];
+
+        if (settings.infiniteAmmo && weaponName != L"")
+        {
+            infiniteAmmo(weaponName);
+        }
+        else if (!settings.infiniteAmmo && weaponName != L"")
+        {
+            restoreAmmo(weaponName);
+        }
+        else
+        {
+            weaponSettingsMap[weaponName].infiniteAmmo = false;
+        }
+
+        // Other per-feature logic
+
+
+
+
     }
-    return 0;
     return 0;
 }
 

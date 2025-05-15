@@ -1,6 +1,9 @@
 #pragma once
 #include <string>
-
-const wchar_t* TryGetWeaponNameRaw();
+#include <Windows.h>
 
 std::wstring readWeaponData();
+
+void infiniteAmmo(const std::wstring& weaponName);
+
+void restoreAmmo(const std::wstring& weaponName);

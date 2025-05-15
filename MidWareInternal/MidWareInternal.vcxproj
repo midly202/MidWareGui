@@ -154,6 +154,7 @@
     <ClCompile Include="src\hooks\hooks.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\utils\helpers.cpp" />
+    <ClCompile Include="src\utils\offsets.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\imgui\imconfig.h" />
@@ -178,6 +179,7 @@
     <ClInclude Include="src\hooks\hooks.h" />
     <ClInclude Include="src\utils\helpers.h" />
     <ClInclude Include="src\utils\offsets.h" />
+    <ClInclude Include="src\utils\structs.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="includes\kiero\minhook\dll_resources\MinHook.def" />
