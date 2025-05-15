@@ -94,7 +94,6 @@ void RenderGUI()
         return; // Skip drawing the rest if minimized
     }
 
-    // Use a tab bar to separate different sections (the same ones as in your mod menu).
     if (ImGui::BeginTabBar("ModMenuTabs"))
     {
         // --- WEAPON Tab ---
@@ -122,8 +121,7 @@ void RenderGUI()
             ImGui::SliderInt("##Recoil Slider", &weaponSettingsMap[weaponName].recoilReduction, 0, 100);
             ImGui::Spacing();
             ImGui::Text("Weapon Caliber");
-            // Combo with a nice look for the caliber selection.
-            if (ImGui::BeginCombo("##Caliber Picker", caliberTypes[weaponSettingsMap[weaponName].caliberIndex]))
+            if (ImGui::BeginCombo("##Caliber Picker", caliberTypes[weaponSettingsMap[weaponName].caliberIndex], ImGuiComboFlags_HeightLargest))
             {
                 for (int i = 0; i < IM_ARRAYSIZE(caliberTypes) - 1; i++)
                 {

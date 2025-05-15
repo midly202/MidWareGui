@@ -69,6 +69,6 @@ int MapCaliberIDToIndex(uint32_t caliberID)
     case 1314319139:
         return 10; // "Bailiff"
     default:
-        return 11; // fallback to "Regular Rifle"
+        return 11; // "Invalid Caliber"
     }
 }

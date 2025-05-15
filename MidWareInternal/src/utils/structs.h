@@ -28,5 +28,5 @@ struct WeaponSettings
 	bool boltScript = false;
 	bool knifeReach = false;
 	int recoilReduction = 0;
-	int caliberIndex = 0;
+	int caliberIndex = 11; // Unknown Caliber
 };
