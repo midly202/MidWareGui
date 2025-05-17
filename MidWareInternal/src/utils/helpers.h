@@ -14,6 +14,10 @@
 #include <thread>
 #include <Windows.h>
 #include <unordered_map>
+#include <iostream>
+#include <cstdint>
+#include <TlHelp32.h>
+#include <winternl.h>
 
 extern std::unordered_map<std::wstring, WeaponSettings> weaponSettingsMap;
 
@@ -22,3 +26,5 @@ std::string WideToNarrow(const std::wstring& wstr);
 uintptr_t GetPointer(uintptr_t base, const std::vector<uintptr_t>& offsets);
 
 int MapCaliberIDToIndex(uint32_t caliberID);
+
+std::wstring GetWeaponNameByRecoil(uint64_t recoilValue);

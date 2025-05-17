@@ -13,25 +13,43 @@ std::unordered_map<std::wstring, WeaponSettings> weaponSettingsMap;
 
 DWORD WINAPI CheatThread(LPVOID)
 {
+    AllocConsole();
+    FILE* f = nullptr;
+    freopen_s(&f, "CONOUT$", "w", stdout);
+    system("cls");
+    system("mode con: cols=70 lines=42");
+
+    HANDLE hMapFile = OpenFileMapping(FILE_MAP_ALL_ACCESS, FALSE, "MySharedMemory");
+    if (!hMapFile) return 1;
+
+    InternalFlags* pFlags = (InternalFlags*)MapViewOfFile(hMapFile, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(InternalFlags));
+    if (!pFlags) return 1;
+
     while (!shouldUnload)
     {
-        /* Testing stability without SEH
-        try {
-            auto result = readWeaponData();
-            currentWeaponName = result;
-        }
-        catch (...) {
-            OutputDebugStringA("Caught C++ exception in readWeaponData\n");
-        }
-
-        currentWeaponName = readWeaponData(); crashes consistently
-
-        */
-
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
+
+        // std::string ocrValue(pFlags->weaponName);
+        std::string ocrValue = std::string(pFlags->weaponName, strnlen(pFlags->weaponName, 64));
+        std::string debugMessage = "[OCR] Shared memory weaponName: " + ocrValue + "\n";
+		std::cout << debugMessage << std::endl;
 
         auto result = readWeaponData();
         weaponName = result;
+
+        if (weaponName.empty())
+        {
+            uintptr_t recoilPtr = GetPointer(baseAddress, offsets::CCurrentWeapon2);
+            if (recoilPtr && recoilPtr > 0x10000)
+            {
+				CCurrentWeapon2* recoil = reinterpret_cast<CCurrentWeapon2*>(recoilPtr);
+                uint64_t recoilValue = recoil->pGunRecoil;
+                std::wstring fallbackName = GetWeaponNameByRecoil(recoilValue);
+                if (!fallbackName.empty())
+                    weaponName = fallbackName;
+            }
+        }
+
 
         if (!weaponName.empty() && weaponName != lastWeaponName)
         {
@@ -81,6 +99,9 @@ DWORD WINAPI CheatThread(LPVOID)
 
 
     }
+    pFlags->exit = true;
+    if (f) fclose(f);
+    FreeConsole();
     return 0;
 }
 

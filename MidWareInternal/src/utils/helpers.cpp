@@ -72,3 +72,23 @@ int MapCaliberIDToIndex(uint32_t caliberID)
         return 11; // "Invalid Caliber"
     }
 }
+
+// THE RECOIL VALUES CHANGE ON RESTART RAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+std::wstring GetWeaponNameByRecoil(uint64_t recoilValue)
+{
+    static const std::unordered_map<uint64_t, std::wstring> recoilToWeaponName = {
+        {2008030430400, L"416-C"},
+        {1552776561056, L"C8-SFW"},
+        {2008030381632, L"CAMRS"},
+        {2008030413440, L"MK17 CQB"},
+        {2008030377792, L"SR-25"}, //1552776562240
+        {2008030376576, L"Super 90"},
+        {2008030385216, L"SPAS-12"},
+        {2008030384256, L"Commando 9"},
+        {2008030457120, L"Mk1 9mm"},
+        {2008030464544, L"Deagle"}
+    };
+
+    auto it = recoilToWeaponName.find(recoilValue);
+    return it != recoilToWeaponName.end() ? it->second : L"";
+}

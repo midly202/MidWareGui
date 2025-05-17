@@ -12,6 +12,7 @@ struct InternalFlags
 	bool exit;
 	uintptr_t runShootAddy1;
 	uintptr_t runShootAddy2;
+	char weaponName[64];
 };
 
 struct WeaponSettings
@@ -28,5 +29,6 @@ struct WeaponSettings
 	bool boltScript = false;
 	bool knifeReach = false;
 	int recoilReduction = 0;
+	int spreadReduction = 0;
 	int caliberIndex = 11; // Unknown Caliber
 };

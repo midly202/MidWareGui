@@ -26,12 +26,6 @@ void RenderGUI()
     // Cheat GUI
     extern std::wstring weaponName;
 
-    static bool unlockAll = false;
-    static bool rapidFire = false;
-    static bool noRecoil = false;
-    static bool noSpread = false;
-    static bool instaKill = false;
-    static bool runAndShoot = false;
     static int selectedCaliber = 0;
     const char* caliberTypes[] = {
         "Regular Rifle",
@@ -45,10 +39,8 @@ void RenderGUI()
         "Maestro's Turret",
         "BOSG",
         "Bailiff",
-        "Unknown Caliber"
+        " "
     };
-    static bool boltScript = false;
-    static bool knifeReach = false;
 
     static bool godMode = false;
     static bool playerSpeed = false;
@@ -107,8 +99,6 @@ void RenderGUI()
             ImGui::Spacing();
             ImGui::Checkbox("Rapid Fire", &weaponSettingsMap[weaponName].rapidFire);
             ImGui::Spacing();
-            ImGui::Checkbox("No Spread", &weaponSettingsMap[weaponName].noSpread);
-            ImGui::Spacing();
             ImGui::Checkbox("InstaKill", &weaponSettingsMap[weaponName].instaKill);
             ImGui::Spacing();
             ImGui::Checkbox("Run and Shoot", &weaponSettingsMap[weaponName].runAndShoot);
@@ -116,6 +106,9 @@ void RenderGUI()
             ImGui::Checkbox("Bolt Script", &weaponSettingsMap[weaponName].boltScript);
             ImGui::Spacing();
             ImGui::Checkbox("Knife Reach", &weaponSettingsMap[weaponName].knifeReach);
+            ImGui::Spacing();
+            ImGui::Text("Spread Reduction Percentage");
+            ImGui::SliderInt("##Spread Slider", &weaponSettingsMap[weaponName].spreadReduction, 0, 100);
             ImGui::Spacing();
             ImGui::Text("Recoil Reduction Percentage");
             ImGui::SliderInt("##Recoil Slider", &weaponSettingsMap[weaponName].recoilReduction, 0, 100);
