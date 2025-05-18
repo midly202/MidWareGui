@@ -23,8 +23,8 @@ extern std::unordered_map<std::wstring, WeaponSettings> weaponSettingsMap;
 
 std::string WideToNarrow(const std::wstring& wstr);
 
+std::wstring NarrowToWide(const std::string& str);
+
 uintptr_t GetPointer(uintptr_t base, const std::vector<uintptr_t>& offsets);
 
 int MapCaliberIDToIndex(uint32_t caliberID);
-
-std::wstring GetWeaponNameByRecoil(uint64_t recoilValue);
