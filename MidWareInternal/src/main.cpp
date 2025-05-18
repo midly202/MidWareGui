@@ -32,7 +32,7 @@ DWORD WINAPI CheatThread(LPVOID)
         // std::string ocrValue(pFlags->weaponName);
         std::string ocrValue = std::string(pFlags->weaponName, strnlen(pFlags->weaponName, 64));
         std::string debugMessage = "[OCR] Shared memory weaponName: " + ocrValue + "\n";
-		std::cout << debugMessage << std::endl;
+        std::cout << debugMessage;
 
         auto result = readWeaponData();
         weaponName = result;
