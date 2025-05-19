@@ -30,5 +30,5 @@ struct WeaponSettings
 	bool knifeReach = false;
 	int recoilReduction = 0;
 	int spreadReduction = 0;
-	int caliberIndex = 11; // Unknown Caliber
+	int caliberIndex = 12; // Unknown Caliber
 };

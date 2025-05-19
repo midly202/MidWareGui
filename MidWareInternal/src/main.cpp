@@ -8,7 +8,7 @@ uintptr_t baseAddress = (uintptr_t)GetModuleHandleA("RainbowSix.exe");
 
 std::wstring weaponName = L"";
 std::wstring lastWeaponName = L"";
-std::wstring fallbackName = L"";
+std::wstring displayWeaponName = L"";
 
 std::unordered_map<std::wstring, WeaponSettings> weaponSettingsMap;
 
@@ -21,9 +21,11 @@ DWORD WINAPI CheatThread(LPVOID)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
+        // get weapon name from dev string
         auto result = readWeaponData();
         weaponName = result;
 
+        // if no dev string found, get weapon name from OCR
         if (weaponName.empty())
         {
             std::string ocrValue = std::string(pFlags->weaponName, strnlen(pFlags->weaponName, 64));
@@ -31,11 +33,9 @@ DWORD WINAPI CheatThread(LPVOID)
                 weaponName = NarrowToWide(ocrValue);
         }
 
-        std::wstring newWeaponName = !weaponName.empty() ? weaponName : fallbackName;
-
-        if (!newWeaponName.empty() && newWeaponName != weaponName)
+        if (!weaponName.empty() && weaponName != lastWeaponName)
         {
-            weaponName = newWeaponName;
+            displayWeaponName = weaponName;
             lastWeaponName = weaponName;
 
             // Create new weapon entry if not already present
@@ -60,6 +60,10 @@ DWORD WINAPI CheatThread(LPVOID)
             }
         }
 
+		// so menu doesn't show last OCR weapon name
+        else if (weaponName.empty())
+            displayWeaponName = L"";
+
         const auto& settings = weaponSettingsMap[weaponName];
 
         if (!weaponName.empty())
@@ -77,7 +81,6 @@ DWORD WINAPI CheatThread(LPVOID)
     }
     return 0;
 }
-
 
 DWORD WINAPI MonitorKeys(LPVOID)
 {
