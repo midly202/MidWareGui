@@ -51,8 +51,15 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+    // Let ImGui handle the input
     if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
         return true;
+
+    // Check if ImGui wants to block input from reaching the game
+    ImGuiIO& io = ImGui::GetIO();
+    if (io.WantCaptureMouse || io.WantCaptureKeyboard)
+        return true; // Block input from reaching the game
+
     return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }
 

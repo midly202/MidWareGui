@@ -116,13 +116,14 @@ void RenderGUI()
             ImGui::SliderInt("##Recoil Slider", &weaponSettingsMap[displayWeaponName].recoilReduction, 0, 100);
             ImGui::Spacing();
             ImGui::Text("Weapon Caliber");
-            if (ImGui::BeginCombo("##Caliber Picker", caliberTypes[weaponSettingsMap[displayWeaponName].caliberIndex], ImGuiComboFlags_HeightLargest))
+            int& caliberIndex = weaponSettingsMap[displayWeaponName].caliberIndex;
+            if (ImGui::BeginCombo("##Caliber Picker", caliberTypes[caliberIndex], ImGuiComboFlags_HeightLargest))
             {
                 for (int i = 0; i < IM_ARRAYSIZE(caliberTypes) - 1; i++)
                 {
-                    bool isSelected = (selectedCaliber == i);
+                    bool isSelected = (caliberIndex == i);  // Compare to actual weapon setting
                     if (ImGui::Selectable(caliberTypes[i], isSelected))
-                        weaponSettingsMap[weaponName].caliberIndex = i;
+                        caliberIndex = i;  // Update directly
                     if (isSelected)
                         ImGui::SetItemDefaultFocus();
                 }
