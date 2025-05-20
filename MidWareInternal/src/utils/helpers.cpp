@@ -72,31 +72,37 @@ uintptr_t GetPointer(uintptr_t base, const std::vector<uintptr_t>& offsets)
 int MapCaliberIDToIndex(uint32_t caliberID)
 {
     switch (caliberID) {
-    case 3864566559:
-        return 0; // "Regular Rifle"
-    case 1635385480:
-        return 1; // "Regular SMG"
     case 224916230:
-        return 2; // "Regular Pistol"
-    case 2022132106:
-		return 3; // "Regular DMR"
-    case 2249646560:
-        return 4; // "Tachanka's DP27"
+        return 0; // "Bullet_SuperLow"
+    case 1635385480:
+        return 1; // "Bullet_Low"
+    case 3864566559:
+        return 2; // "Bullet_Mid"
+    case 156726242:
+		return 3; // "Bullet_High"
     case 54247478:
-        return 5; // "Tachanka's DP27 Turret"
-    case 1216095593:
-        return 6; // "Buck's Skeleton Key"
-    case 3683118896:
-        return 7; // "Kali's Sniper"
-    case 2097060903:
-        return 8; // "Maverick's Blowtorch"
-    case 1800674797:
-        return 9; // "Maestro's Turret"
+        return 4; // "Bullet_SuperHigh"
+    case 3321364808:
+        return 5; // "Bullet_MaxPower"
     case 1586594484:
-        return 10; // "BOSG"
+        return 6; // "Bullet_BOSG"
+    case 3683118896:
+        return 7; // "Bullet_CSRX300"
+    case 2022132106:
+        return 8; // "Bullet_DMR"
+    case 2249646560:
+        return 9; // "Bullet_DP27"
     case 1314319139:
-        return 11; // "Bailiff"
+        return 10; // "Shell_Low"
+    case 3379851444:
+        return 11; // "Shell_Mid"
+    case 1216095593:
+        return 12; // "Shell_High"
+    case 1800674797:
+        return 13; // "Gadget_BarrageTurret"
+    case 2097060903:
+        return 14; // "Gadget_BlowTorch"
     default:
-        return 12; // "Invalid Caliber"
+        return 15; // "Invalid Caliber"
     }
 }

@@ -29,18 +29,21 @@ void RenderGUI()
 
     static int selectedCaliber = 0;
     const char* caliberTypes[] = {
-        "Regular Rifle",
-        "Regular SMG",
-        "Regular Pistol",
-        "Regular DMR",
-        "Tachanka's DP27",
-        "Tachanka's DP27 (Turret)",
-        "Buck's Skeleton Key",
-        "Kali's Sniper",
-        "Maverick's Blowtorch",
-        "Maestro's Turret",
-        "BOSG",
-        "Bailiff",
+        "Bullet_SuperLow",
+        "Bullet_Low",
+        "Bullet_Mid",
+        "Bullet_High",
+        "Bullet_SuperHigh",
+        "Bullet_MaxPower",
+        "Bullet_BOSG",
+        "Bullet_CSRX300",
+        "Bullet_DMR",
+        "Bullet_DP27",
+        "Shell_Low",
+        "Shell_Mid",
+        "Shell_High",
+        "Gadget_BarrageTurret",
+        "Gadget_BlowTorch",
         " "
     };
 

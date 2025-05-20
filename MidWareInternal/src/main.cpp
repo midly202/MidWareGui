@@ -33,7 +33,7 @@ DWORD WINAPI CheatThread(LPVOID)
                 weaponName = NarrowToWide(ocrValue);
         }
 
-        if (!weaponName.empty() && weaponName != lastWeaponName)
+        if (!weaponName.empty())
         {
             displayWeaponName = weaponName;
             lastWeaponName = weaponName;
