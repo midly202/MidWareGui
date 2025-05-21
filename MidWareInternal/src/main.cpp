@@ -6,14 +6,16 @@ bool shouldUnload = false;
 HMODULE g_hModule = NULL;
 uintptr_t baseAddress = (uintptr_t)GetModuleHandleA("RainbowSix.exe");
 
-std::wstring weaponName = L"";
-std::wstring lastWeaponName = L"";
-std::wstring displayWeaponName = L"";
+HANDLE hMapFile = OpenFileMapping(FILE_MAP_ALL_ACCESS, FALSE, "MySharedMemory");
+InternalFlags* pFlags = (InternalFlags*)MapViewOfFile(hMapFile, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(InternalFlags));
 
 std::unordered_map<std::wstring, WeaponSettings> weaponSettingsMap;
 
-HANDLE hMapFile = OpenFileMapping(FILE_MAP_ALL_ACCESS, FALSE, "MySharedMemory");
-InternalFlags* pFlags = (InternalFlags*)MapViewOfFile(hMapFile, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(InternalFlags));
+WeaponSettingsGlobal weaponSettingsGlobal;
+
+std::wstring weaponName = L"";
+std::wstring lastWeaponName = L"";
+std::wstring displayWeaponName = L"";
 
 DWORD WINAPI CheatThread(LPVOID)
 {
@@ -82,13 +84,49 @@ DWORD WINAPI CheatThread(LPVOID)
             weaponSettingsMap[weaponName].recoilReduction = 0;
             weaponSettingsMap[weaponName].spreadReduction = 0;
             weaponSettingsMap[weaponName].caliberIndex = 15;
-        }        
+        }     
+
+        if (weaponSettingsGlobal.toggleRunShoot)
+        {
+            pFlags->runShoot = true;
+            weaponSettingsGlobal.toggleRunShoot = false;
+        }
+
+        if (weaponSettingsGlobal.toggleGlowESP)
+        {
+            pFlags->glowESP = true;
+            weaponSettingsGlobal.toggleGlowESP = false;
+        }
+
+        if (weaponSettingsGlobal.toggleBoltScript)
+        {
+            pFlags->boltScript = true;
+            weaponSettingsGlobal.toggleBoltScript = false;
+        }
+
+        if (weaponSettingsGlobal.toggleGoOutside)
+        {
+            pFlags->goOutside = true;
+            weaponSettingsGlobal.toggleGoOutside = false;
+        }
+
+        if (weaponSettingsGlobal.toggleInfGadgets)
+        {
+            pFlags->infGadget = true;
+            weaponSettingsGlobal.toggleInfGadgets = false;
+        }
     }
     return 0;
 }
 
 DWORD WINAPI MonitorKeys(LPVOID)
 {
+    uintptr_t address1 = FindPattern("RainbowSix.exe", "\x80\xB9\x00\x00\x00\x00\x00\x74\x15\xE8", "xx?????xxx");
+    uintptr_t address2 = FindPattern("RainbowSix.exe", "\x80\xB9\x00\x00\x00\x00\x00\x0F\x84\x00\x00\x00\x00\x48\x89\xF1\x31", "xx?????xx????xxxx");
+
+    pFlags->runShootAddy1 = address1;
+    pFlags->runShootAddy2 = address2;
+
     while (!GetAsyncKeyState(VK_INSERT))
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
 

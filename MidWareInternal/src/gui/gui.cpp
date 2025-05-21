@@ -27,6 +27,8 @@ void RenderGUI()
     extern std::wstring weaponName;
     extern std::wstring displayWeaponName;
 
+    extern WeaponSettingsGlobal weaponSettingsGlobal;
+
     static int selectedCaliber = 0;
     const char* caliberTypes[] = {
         "Bullet_SuperLow",
@@ -106,11 +108,14 @@ void RenderGUI()
             ImGui::Spacing();
             ImGui::Checkbox("InstaKill", &weaponSettingsMap[displayWeaponName].instaKill);
             ImGui::Spacing();
-            ImGui::Checkbox("Run and Shoot", &weaponSettingsMap[displayWeaponName].runAndShoot);
+            if (ImGui::Checkbox("Run & Shoot", &weaponSettingsGlobal.runShoot))
+                weaponSettingsGlobal.toggleRunShoot = true;
             ImGui::Spacing();
-            ImGui::Checkbox("Bolt Script", &weaponSettingsMap[displayWeaponName].boltScript);
+            if (ImGui::Checkbox("Bolt Script", &weaponSettingsGlobal.boltScript))
+                weaponSettingsGlobal.toggleBoltScript = true;
             ImGui::Spacing();
-            ImGui::Checkbox("Knife Reach", &weaponSettingsMap[displayWeaponName].knifeReach);
+            if (ImGui::Checkbox("Knife Reach", &weaponSettingsGlobal.knifeReach))
+                weaponSettingsGlobal.toggleKnifeReach = true;
             ImGui::Spacing();
             ImGui::Text("Spread Reduction Percentage");
             ImGui::SliderInt("##Spread Slider", &weaponSettingsMap[displayWeaponName].spreadReduction, 0, 100);
@@ -144,7 +149,8 @@ void RenderGUI()
             ImGui::Spacing();
             ImGui::Checkbox("NoClip", &noClip);
             ImGui::Spacing();
-            ImGui::Checkbox("Infinite Gadgets", &infiniteGadgets);
+            if (ImGui::Checkbox("Infinite Gadgets", &infiniteGadgets))
+                weaponSettingsGlobal.toggleInfGadgets = true;
             ImGui::Spacing();
             ImGui::Text("Player Speed Multiplier");
             static float sliderSpeed = 1.0f;
@@ -157,7 +163,8 @@ void RenderGUI()
         if (ImGui::BeginTabItem("VISUAL"))
         {
             ImGui::Spacing();
-            ImGui::Checkbox("Glow ESP", &glowESP);
+            if (ImGui::Checkbox("Glow ESP", &weaponSettingsGlobal.glowESP)) // not implemented yet
+                weaponSettingsGlobal.toggleGlowESP = true;
             ImGui::Spacing();
             ImGui::Checkbox("Remove Sky", &removeSky);
             ImGui::Spacing();
@@ -206,9 +213,11 @@ void RenderGUI()
         if (ImGui::BeginTabItem("T-HUNT"))
         {
             ImGui::Spacing();
-            ImGui::Checkbox("Lock Wave", &lockWave);
+            if (ImGui::Checkbox("Lock Wave", &lockWave)) // not implemented yet
+                weaponSettingsGlobal.toggleLockWave = true;
             ImGui::Spacing();
-            ImGui::Checkbox("Can Go Outside", &canGoOutside);
+            if (ImGui::Checkbox("Can Go Outside", &canGoOutside))
+                weaponSettingsGlobal.toggleGoOutside = true;
             ImGui::Spacing();
             ImGui::EndTabItem();
         }
