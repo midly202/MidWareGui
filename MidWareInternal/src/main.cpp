@@ -73,11 +73,16 @@ DWORD WINAPI CheatThread(LPVOID)
             else
                 restoreAmmo(weaponName);
         }
-
-        if (weaponName.empty())
+        else
         {
             weaponSettingsMap[weaponName].infiniteAmmo = false;
-        }
+            weaponSettingsMap[weaponName].rapidFire = false;
+            weaponSettingsMap[weaponName].noSpread = false;
+            weaponSettingsMap[weaponName].instaKill = false;
+            weaponSettingsMap[weaponName].recoilReduction = 0;
+            weaponSettingsMap[weaponName].spreadReduction = 0;
+            weaponSettingsMap[weaponName].caliberIndex = 15;
+        }        
     }
     return 0;
 }

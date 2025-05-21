@@ -18,6 +18,7 @@
 #include <cstdint>
 #include <TlHelp32.h>
 #include <winternl.h>
+#include <Psapi.h>
 
 extern std::unordered_map<std::wstring, WeaponSettings> weaponSettingsMap;
 
@@ -26,5 +27,9 @@ std::string WideToNarrow(const std::wstring& wstr);
 std::wstring NarrowToWide(const std::string& str);
 
 uintptr_t GetPointer(uintptr_t base, const std::vector<uintptr_t>& offsets);
+
+MODULEINFO GetModuleInfo(const char* szModule);
+
+uintptr_t FindPattern(const char* module, const char* pattern, const char* mask);
 
 int MapCaliberIDToIndex(uint32_t caliberID);

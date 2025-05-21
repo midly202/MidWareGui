@@ -32,3 +32,15 @@ struct WeaponSettings
 	int spreadReduction = 0;
 	int caliberIndex = 15; // Unknown Caliber
 };
+
+struct WeaponSettingsGlobal
+{
+	bool toggleRunShoot = false;
+	bool toggleGlowESP = false;
+	bool toggleBoltScript = false;
+
+	bool knifeReach = false;
+	bool runShoot = false;
+	bool boltScript = false;
+	bool glowESP = false;
+};

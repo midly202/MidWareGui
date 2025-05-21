@@ -14,10 +14,14 @@ extern bool shouldUnload;
 
 HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
 {
-    if (shouldUnload)
-        return oPresent(pSwapChain, SyncInterval, Flags); // skip rendering after unload flag is set
-
     static bool init = false;
+
+    if (shouldUnload)
+    {
+        init = false; // <== Reset so re-injection triggers InitGUI again
+        return oPresent(pSwapChain, SyncInterval, Flags);
+    }
+
     if (!init)
     {
         if (SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), (void**)&pDevice)))
@@ -29,11 +33,19 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 
             ID3D11Texture2D* pBackBuffer;
             pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&pBackBuffer);
-            pDevice->CreateRenderTargetView(pBackBuffer, NULL, &mainRenderTargetView);
-            pBackBuffer->Release();
+            if (pBackBuffer)
+            {
+                pDevice->CreateRenderTargetView(pBackBuffer, NULL, &mainRenderTargetView);
+                pBackBuffer->Release();
+            }
+            else
+            {
+                return oPresent(pSwapChain, SyncInterval, Flags);
+            }
 
             oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)WndProc);
             InitGUI(window, pDevice, pContext);
+            
             init = true;
         }
         else
@@ -51,14 +63,15 @@ HRESULT __stdcall hkPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT 
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Let ImGui handle the input
+    if (!ImGui::GetCurrentContext())
+        return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
+
     if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
         return true;
 
-    // Check if ImGui wants to block input from reaching the game
     ImGuiIO& io = ImGui::GetIO();
     if (io.WantCaptureMouse || io.WantCaptureKeyboard)
-        return true; // Block input from reaching the game
+        return true;
 
     return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }
@@ -74,7 +87,11 @@ void Cleanup()
     ImGui::DestroyContext();
 
     if (oWndProc && window)
+    {
         SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)oWndProc);
+        oWndProc = nullptr;
+        window = nullptr;
+    }
 
     kiero::shutdown();
 }

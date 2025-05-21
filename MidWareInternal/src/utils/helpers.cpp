@@ -54,19 +54,50 @@ std::wstring NarrowToWide(const std::string& str)
 
 uintptr_t GetPointer(uintptr_t base, const std::vector<uintptr_t>& offsets)
 {
-	uintptr_t addr = base;
-	MEMORY_BASIC_INFORMATION mbi;
+    uintptr_t addr = base;
+    MEMORY_BASIC_INFORMATION mbi;
 
-	for (auto offset : offsets)
-	{
-		uintptr_t ptrToCheck = addr + offset;
+    for (auto offset : offsets)
+    {
+        uintptr_t ptrToCheck = addr + offset;
 
-		if (!VirtualQuery((void*)ptrToCheck, &mbi, sizeof(mbi)) || mbi.State != MEM_COMMIT)
-			return 0; // invalid memory, abort
+        if (!VirtualQuery((void*)ptrToCheck, &mbi, sizeof(mbi)) || mbi.State != MEM_COMMIT)
+            return 0; // invalid memory, abort
 
-		addr = *(uintptr_t*)ptrToCheck;
-	}
-	return addr;
+        addr = *(uintptr_t*)ptrToCheck;
+    }
+    return addr;
+}
+
+MODULEINFO GetModuleInfo(const char* szModule)
+{
+    MODULEINFO modInfo = { 0 };
+    HMODULE hModule = GetModuleHandle(szModule);
+    if (hModule == 0)
+        return modInfo;
+    GetModuleInformation(GetCurrentProcess(), hModule, &modInfo, sizeof(MODULEINFO));
+    return modInfo;
+}
+
+uintptr_t FindPattern(const char* module, const char* pattern, const char* mask)
+{
+    MODULEINFO moduleInfo = GetModuleInfo(module);
+    uintptr_t baseAddress = (uintptr_t)moduleInfo.lpBaseOfDll;
+    uintptr_t moduleSize = (uintptr_t)moduleInfo.SizeOfImage;
+    uintptr_t patternLength = (uintptr_t)strlen(mask);
+    for (uintptr_t i = 0; i < moduleSize - patternLength; i++)
+    {
+        bool found = true;
+        for (uintptr_t j = 0; j < patternLength; j++)
+        {
+            found &= mask[j] == '?' || pattern[j] == *(char*)(baseAddress + i + j);
+        }
+        if (found)
+        {
+            return baseAddress + i;
+        }
+    }
+    return NULL;
 }
 
 int MapCaliberIDToIndex(uint32_t caliberID)
@@ -79,7 +110,7 @@ int MapCaliberIDToIndex(uint32_t caliberID)
     case 3864566559:
         return 2; // "Bullet_Mid"
     case 156726242:
-		return 3; // "Bullet_High"
+        return 3; // "Bullet_High"
     case 54247478:
         return 4; // "Bullet_SuperHigh"
     case 3321364808:
