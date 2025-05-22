@@ -104,6 +104,10 @@ void RenderGUI()
             ImGui::Spacing();
             ImGui::Checkbox("Infinite Ammo", &weaponSettingsMap[displayWeaponName].infiniteAmmo);
             ImGui::Spacing();
+            ImGui::Checkbox("No Recoil", &weaponSettingsMap[displayWeaponName].noRecoil);
+            ImGui::Spacing();
+            ImGui::Checkbox("Full Auto", &weaponSettingsMap[displayWeaponName].fullAuto);
+            ImGui::Spacing();
             ImGui::Checkbox("Rapid Fire", &weaponSettingsMap[displayWeaponName].rapidFire);
             ImGui::Spacing();
             ImGui::Checkbox("InstaKill", &weaponSettingsMap[displayWeaponName].instaKill);
@@ -119,9 +123,6 @@ void RenderGUI()
             ImGui::Spacing();
             ImGui::Text("Spread Reduction Percentage");
             ImGui::SliderInt("##Spread Slider", &weaponSettingsMap[displayWeaponName].spreadReduction, 0, 100);
-            ImGui::Spacing();
-            ImGui::Text("Recoil Reduction Percentage");
-            ImGui::SliderInt("##Recoil Slider", &weaponSettingsMap[displayWeaponName].recoilReduction, 0, 100);
             ImGui::Spacing();
             ImGui::Text("Weapon Caliber");
             int& caliberIndex = weaponSettingsMap[displayWeaponName].caliberIndex;

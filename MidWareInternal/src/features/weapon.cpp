@@ -50,3 +50,113 @@ void restoreAmmo(const std::wstring& weaponName)
     if (weaponComponent->gunAmmo > 9000)
         weaponComponent->gunAmmo = weaponSettingsMap[weaponName].originalAmmoValue;
 }
+
+void noRecoil(const std::wstring& weaponName)
+{
+    if (weaponName.empty()) return;
+
+    uintptr_t weaponPtr = GetPointer(baseAddress, offsets::CCurrentWeapon2);
+    if (!weaponPtr || weaponPtr < 0x10000)
+        return;
+
+    CCurrentWeapon2* weapon = reinterpret_cast<CCurrentWeapon2*>(weaponPtr);
+
+    weapon->pGunRecoil = 0;
+}
+
+void restoreRecoil(const std::wstring& weaponName)
+{
+    if (weaponName.empty()) return;
+
+    uintptr_t weaponPtr = GetPointer(baseAddress, offsets::CCurrentWeapon2);
+    if (!weaponPtr || weaponPtr < 0x10000)
+        return;
+
+    CCurrentWeapon2* weapon = reinterpret_cast<CCurrentWeapon2*>(weaponPtr);
+
+    weapon->pGunRecoil = weaponSettingsMap[weaponName].originalRecoilValue;
+}
+
+void fullAuto(const std::wstring& weaponName)
+{
+    if (weaponName.empty()) return;
+
+    uintptr_t firemodePtr = GetPointer(baseAddress, offsets::WeaponComponent);
+    if (!firemodePtr || firemodePtr < 0x10000)
+        return;
+
+    WeaponComponent* weaponComponent = reinterpret_cast<WeaponComponent*>(firemodePtr);
+
+    weaponComponent->gunFireMode = 0;
+}
+
+void restoreFullAuto(const std::wstring& weaponName)
+{
+    if (weaponName.empty()) return;
+
+    uintptr_t firemodePtr = GetPointer(baseAddress, offsets::WeaponComponent);
+    if (!firemodePtr || firemodePtr < 0x10000)
+        return;
+
+    WeaponComponent* weaponComponent = reinterpret_cast<WeaponComponent*>(firemodePtr);
+
+    weaponComponent->gunFireMode = weaponSettingsMap[weaponName].originalFiremodeValue;
+}
+
+void rapidFire(const std::wstring& weaponName)
+{
+    if (weaponName.empty()) return;
+
+    uintptr_t fireratePtr = GetPointer(baseAddress, offsets::CCurrentWeapon3);
+    if (!fireratePtr || fireratePtr < 0x10000)
+        return;
+
+    CCurrentWeapon3* currentWeapon = reinterpret_cast<CCurrentWeapon3*>(fireratePtr);
+
+    currentWeapon->GunFireRate = 9999;
+}
+
+void restoreRapidFire(const std::wstring& weaponName)
+{
+    if (weaponName.empty()) return;
+
+    uintptr_t fireratePtr = GetPointer(baseAddress, offsets::CCurrentWeapon3);
+    if (!fireratePtr || fireratePtr < 0x10000)
+        return;
+
+    CCurrentWeapon3* currentWeapon = reinterpret_cast<CCurrentWeapon3*>(fireratePtr);
+
+    if (currentWeapon->GunFireRate >= 1000)
+    {
+        currentWeapon->GunFireRate = weaponSettingsMap[weaponName].originalFirerateValue;
+    }
+}
+
+void instaKill(const std::wstring& weaponName)
+{
+    if (weaponName.empty()) return;
+
+    uintptr_t weaponPtr = GetPointer(baseAddress, offsets::CCurrentWeapon4);
+    if (!weaponPtr || weaponPtr < 0x10000)
+        return;
+
+    CCurrentWeapon4* currentWeapon = reinterpret_cast<CCurrentWeapon4*>(weaponPtr);
+
+    currentWeapon->GunDamage = 9999;
+}
+
+void restoreInstaKill(const std::wstring& weaponName)
+{
+    if (weaponName.empty()) return;
+
+    uintptr_t weaponPtr = GetPointer(baseAddress, offsets::CCurrentWeapon4);
+    if (!weaponPtr || weaponPtr < 0x10000)
+        return;
+
+    CCurrentWeapon4* currentWeapon = reinterpret_cast<CCurrentWeapon4*>(weaponPtr);
+
+    if (currentWeapon->GunDamage >= 8000)
+    {
+        currentWeapon->GunDamage = weaponSettingsMap[weaponName].originalDamageValue;
+    }
+}

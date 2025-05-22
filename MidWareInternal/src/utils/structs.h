@@ -19,16 +19,21 @@ struct WeaponSettings
 {
 	// original values
 	int32_t originalAmmoValue = -1;
+	int64_t originalRecoilValue = -1;
+	int8_t originalFiremodeValue = -1;
+	int32_t originalFirerateValue = -1;
+	int32_t originalDamageValue = -1;
 
 	// toggles
 	bool infiniteAmmo = false;
+	bool noRecoil = false;
+	bool fullAuto = false;
 	bool rapidFire = false;
 	bool noSpread = false;
 	bool instaKill = false;
 	bool runAndShoot = false;
 	bool boltScript = false;
 	bool knifeReach = false;
-	int recoilReduction = 0;
 	int spreadReduction = 0;
 	int caliberIndex = 15; // Unknown Caliber
 };

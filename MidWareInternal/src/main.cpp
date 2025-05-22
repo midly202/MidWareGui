@@ -19,6 +19,14 @@ std::wstring displayWeaponName = L"";
 
 DWORD WINAPI CheatThread(LPVOID)
 {
+    /*
+    AllocConsole();
+    FILE* f = nullptr;
+    freopen_s(&f, "CONOUT$", "w", stdout);
+    system("cls");
+    SetConsoleTitleA("MidWare Internal - Console");
+    */
+
     while (!shouldUnload)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
@@ -51,13 +59,32 @@ DWORD WINAPI CheatThread(LPVOID)
                 if (!caliberPtr || caliberPtr < 0x10000)
                     return 1;
 
+                uintptr_t currWeapon2Ptr = GetPointer(baseAddress, offsets::CCurrentWeapon2);
+                if (!currWeapon2Ptr || currWeapon2Ptr < 0x10000)
+                    return 1;
+
+                uintptr_t currWeapon3Ptr = GetPointer(baseAddress, offsets::CCurrentWeapon3);
+                if (!currWeapon3Ptr || currWeapon3Ptr < 0x10000)
+                    return 1;
+
+                uintptr_t currWeapon4Ptr = GetPointer(baseAddress, offsets::CCurrentWeapon4);
+                if (!currWeapon4Ptr || currWeapon4Ptr < 0x10000)
+                    return 1;
+
                 WeaponComponent* weaponComponent = reinterpret_cast<WeaponComponent*>(weaponPtr);
                 CCurrentWeaponCaliber* gunCaliber = reinterpret_cast<CCurrentWeaponCaliber*>(caliberPtr);
+                CCurrentWeapon2* currWeapon2 = reinterpret_cast<CCurrentWeapon2*>(currWeapon2Ptr);
+                CCurrentWeapon3* currWeapon3 = reinterpret_cast<CCurrentWeapon3*>(currWeapon3Ptr);
+                CCurrentWeapon4* currWeapon4 = reinterpret_cast<CCurrentWeapon4*>(currWeapon4Ptr);
 
                 weaponSettingsMap[weaponName] = WeaponSettings();
 
                 WeaponSettings& settings = weaponSettingsMap[weaponName];
                 settings.originalAmmoValue = weaponComponent->gunAmmo;
+                settings.originalRecoilValue = currWeapon2->pGunRecoil;
+                settings.originalFiremodeValue = weaponComponent->gunFireMode;
+                settings.originalFirerateValue = currWeapon3->GunFireRate;
+                settings.originalDamageValue = currWeapon4->GunDamage;
                 settings.caliberIndex = MapCaliberIDToIndex(gunCaliber->GunCaliber);
             }
         }
@@ -74,6 +101,26 @@ DWORD WINAPI CheatThread(LPVOID)
                 infiniteAmmo(weaponName);
             else
                 restoreAmmo(weaponName);
+
+            if (settings.noRecoil)
+                noRecoil(weaponName);
+            else
+                restoreRecoil(weaponName);
+
+            if (settings.fullAuto)
+                fullAuto(weaponName);
+            else
+                restoreFullAuto(weaponName);
+
+            if (settings.rapidFire)
+                rapidFire(weaponName);
+            else
+                restoreRapidFire(weaponName);
+
+            if (settings.instaKill)
+                instaKill(weaponName);
+            else
+                restoreInstaKill(weaponName);
         }
         else
         {
@@ -81,7 +128,7 @@ DWORD WINAPI CheatThread(LPVOID)
             weaponSettingsMap[weaponName].rapidFire = false;
             weaponSettingsMap[weaponName].noSpread = false;
             weaponSettingsMap[weaponName].instaKill = false;
-            weaponSettingsMap[weaponName].recoilReduction = 0;
+            weaponSettingsMap[weaponName].noRecoil = false;
             weaponSettingsMap[weaponName].spreadReduction = 0;
             weaponSettingsMap[weaponName].caliberIndex = 15;
         }     
@@ -116,6 +163,11 @@ DWORD WINAPI CheatThread(LPVOID)
             weaponSettingsGlobal.toggleInfGadgets = false;
         }
     }
+
+    /*
+    if (f) fclose(f);
+    FreeConsole();
+    */
     return 0;
 }
 
@@ -123,6 +175,9 @@ DWORD WINAPI MonitorKeys(LPVOID)
 {
     uintptr_t address1 = FindPattern("RainbowSix.exe", "\x80\xB9\x00\x00\x00\x00\x00\x74\x15\xE8", "xx?????xxx");
     uintptr_t address2 = FindPattern("RainbowSix.exe", "\x80\xB9\x00\x00\x00\x00\x00\x0F\x84\x00\x00\x00\x00\x48\x89\xF1\x31", "xx?????xx????xxxx");
+
+    while (!address1 && !address2)
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
     pFlags->runShootAddy1 = address1;
     pFlags->runShootAddy2 = address2;
@@ -135,6 +190,16 @@ DWORD WINAPI MonitorKeys(LPVOID)
     // Wait for Present hook to finish and exit
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
     pFlags->exit = true;
+    if (pFlags) 
+    {
+        UnmapViewOfFile(pFlags);
+        pFlags = nullptr;
+    }
+    if (hMapFile) 
+    {
+        CloseHandle(hMapFile);
+        hMapFile = nullptr;
+    }
     Cleanup();
     FreeLibraryAndExitThread(g_hModule, 0);
     return 0;

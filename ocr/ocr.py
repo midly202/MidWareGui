@@ -7,7 +7,7 @@ import numpy as np
 import ctypes
 import mmap
 import sys
-from rapidfuzz import fuzz, process # type: ignore
+from rapidfuzz import fuzz, process  # type: ignore
 
 # Define the C-compatible structure
 class InternalFlags(ctypes.Structure):
@@ -48,7 +48,7 @@ weapon_aliases = {
     "CAMRS": ["camrs", "cam-rs"],
     "MK17 CQB": ["mk17", "mk 17", "mk17 cqb", "MKT7 CQB", "MK 17 CQB", "MKT 7 CQB", "MKI7 CQB", "MK I7 CQB", "MK7 CQB"],
     "SR 25": ["sr25", "sr-25", "SR 25"],
-    "Super 90": ["super90", "super 90", "s90", "super"],
+    "Super 90": ["super90", "super 90", "super"],
     "SPAS 12": ["spas12", "spas-12"],
     "Commando 9": ["commando9", "commando-9", "COMMANDO", "COMMANDO 9"],
     "Mk1 9mm": ["mk1", "mk1 9mm", "mk1-9mm", "MK 1", "MK I", "MKI"],
@@ -74,9 +74,13 @@ def match_weapon_name(ocr_text):
                 return canonical
     return None
 
-print(f"[INFO] Starting OCR loop (GPU: {'Yes' if use_gpu else 'No'})... Press Ctrl+C to stop.")
+def send_weapon_name(name: str):
+    mem.seek(ctypes.sizeof(InternalFlags) - 64)  # Offset to weaponName
+    text_bytes = name.encode('utf-8')[:63]
+    padded = text_bytes + b'\x00' * (64 - len(text_bytes))
+    mem.write(padded)
 
-last_sent_name = ""  # Track last weapon name sent
+print(f"[INFO] Starting OCR loop (GPU: {'Yes' if use_gpu else 'No'})... Press Ctrl+C to stop.")
 
 try:
     while True:
@@ -86,32 +90,21 @@ try:
 
         os.system('cls' if os.name == 'nt' else 'clear')
 
-        matched = None
         if results:
             text = results[0][1]
             print(f"[RAW OCR] {text} ({results[0][2]:.2f})")
+
             matched = match_weapon_name(text)
 
-        if matched:
-            print(f"[MATCHED] {matched}")
-            if matched != last_sent_name:
-                flags = InternalFlags()
-                text_bytes = matched.encode('utf-8')[:63]
-                flags.weaponName = text_bytes + b'\x00' * (64 - len(text_bytes))
-                mem.seek(0)
-                mem.write(bytes(flags))
-                last_sent_name = matched
+            if matched:
+                print(f"[MATCHED] {matched}")
+                send_weapon_name(matched)
             else:
-                print("[INFO] Match unchanged, not writing to memory.")
+                print(f"[IGNORED] '{text}' (no close match)")
+                send_weapon_name("")  # Clear previous value
         else:
-            print("[IGNORED] No valid match")
-            if last_sent_name != "":
-                # Send empty string to clear last entry
-                flags = InternalFlags()
-                flags.weaponName = b'\x00' * 64
-                mem.seek(0)
-                mem.write(bytes(flags))
-                last_sent_name = ""
+            print("[INFO] No text detected.")
+            send_weapon_name("")  # Clear previous value
 
         time.sleep(1)
 
