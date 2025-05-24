@@ -130,11 +130,7 @@ void RenderGUI()
                     knife->knifeDistancePlayers == 9999 &&
                     (knife->knifeDistanceWalls >= 1.2 && knife->knifeDistanceWalls < 1.4 ||
                         knife->knifeDistanceWalls == 9999))
-                {
                     ImGui::Checkbox("Knife Reach", &weaponSettingsGlobal.knifeReach);
-                    if (ImGui::IsItemHovered())
-                        ImGui::SetTooltip("Turn this OFF before the game ends! Crashes occur otherwise.");
-                }
 
                 else 
                 {

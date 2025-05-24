@@ -130,6 +130,18 @@ DWORD WINAPI CheatThread(LPVOID)
 				restoreKnifeReach();
         }
 
+        else
+        {
+            weaponSettingsMap[weaponName].infiniteAmmo = false;
+            weaponSettingsMap[weaponName].fullAuto = false;
+            weaponSettingsMap[weaponName].rapidFire = false;
+            weaponSettingsMap[weaponName].noSpread = false;
+            weaponSettingsMap[weaponName].instaKill = false;
+            weaponSettingsMap[weaponName].noRecoil = false;
+            weaponSettingsMap[weaponName].spreadReduction = 0;
+            weaponSettingsMap[weaponName].caliberIndex = 15;
+        }
+
         if (weaponSettingsGlobal.toggleRunShoot)
         {
             pFlags->runShoot = true;
@@ -160,7 +172,11 @@ DWORD WINAPI CheatThread(LPVOID)
             weaponSettingsGlobal.toggleInfGadgets = false;
         }
 
-        // disable knife reach if health is zero or invalid
+        /*
+        If health is 0 or invalid, disable knife reach (write the default values). 
+        This is required as leaving knife distance on a non-default value will cause the game to crash when switching sessions.
+		Health is used as it's the first memory to be unloaded when switching sessions.
+        */
         uintptr_t healthPtr = GetPointer(baseAddress, offsets::GodMode);
         if (healthPtr && healthPtr > 0x10000)
         {
