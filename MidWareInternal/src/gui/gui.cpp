@@ -256,7 +256,9 @@ void RenderGUI()
 
     // Footer text for a polished finish.
     ImGui::Separator();
-    ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.9f, 1.0f), "Made by @ midly :3");
+    ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.9f, 1.0f), "Made by Midly :3");
+    if (ImGui::IsItemHovered())
+        ImGui::SetTooltip("Discord: @midly\nGithub:  @midly202");
     ImGui::End();
     ImGui::PopStyleColor();
     ImGui::PopStyleVar();
