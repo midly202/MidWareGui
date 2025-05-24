@@ -26,6 +26,8 @@ DWORD WINAPI CheatThread(LPVOID)
     system("cls");
     SetConsoleTitleA("MidWare Internal - Console");
     */
+    std::chrono::steady_clock::time_point weaponEmptyStartTime;
+    bool weaponEmptyHeld = false;
 
     while (!shouldUnload)
     {
@@ -121,17 +123,12 @@ DWORD WINAPI CheatThread(LPVOID)
                 instaKill(weaponName);
             else
                 restoreInstaKill(weaponName);
+
+            if (weaponSettingsGlobal.knifeReach)
+                knifeReach();
+            else
+				restoreKnifeReach();
         }
-        else
-        {
-            weaponSettingsMap[weaponName].infiniteAmmo = false;
-            weaponSettingsMap[weaponName].rapidFire = false;
-            weaponSettingsMap[weaponName].noSpread = false;
-            weaponSettingsMap[weaponName].instaKill = false;
-            weaponSettingsMap[weaponName].noRecoil = false;
-            weaponSettingsMap[weaponName].spreadReduction = 0;
-            weaponSettingsMap[weaponName].caliberIndex = 15;
-        }     
 
         if (weaponSettingsGlobal.toggleRunShoot)
         {
@@ -162,6 +159,17 @@ DWORD WINAPI CheatThread(LPVOID)
             pFlags->infGadget = true;
             weaponSettingsGlobal.toggleInfGadgets = false;
         }
+
+        // disable knife reach if health is zero or invalid
+        uintptr_t healthPtr = GetPointer(baseAddress, offsets::GodMode);
+        if (healthPtr && healthPtr > 0x10000)
+        {
+            Health* health = reinterpret_cast<Health*>(healthPtr);
+            if (!health->Health)
+                weaponSettingsGlobal.knifeReach = false;
+        }
+        else
+			weaponSettingsGlobal.knifeReach = false;
     }
 
     /*

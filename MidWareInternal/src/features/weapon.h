@@ -23,3 +23,7 @@ void restoreRapidFire(const std::wstring& weaponName);
 void instaKill(const std::wstring& weaponName);
 
 void restoreInstaKill(const std::wstring& weaponName);
+
+void knifeReach();
+
+void restoreKnifeReach();

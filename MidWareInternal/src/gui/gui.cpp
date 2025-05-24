@@ -27,7 +27,10 @@ void RenderGUI()
     extern std::wstring weaponName;
     extern std::wstring displayWeaponName;
 
+    extern uintptr_t baseAddress;
     extern WeaponSettingsGlobal weaponSettingsGlobal;
+
+    bool knifeReachBugged = false;
 
     static int selectedCaliber = 0;
     const char* caliberTypes[] = {
@@ -54,7 +57,6 @@ void RenderGUI()
     static bool noClip = false;
     static bool infiniteGadgets = false;
 
-    static bool glowESP = false;
     static bool fisheyeFOV = false;
     static bool removeSky = false;
     static bool thirdPerson = false;
@@ -118,8 +120,38 @@ void RenderGUI()
             if (ImGui::Checkbox("Bolt Script", &weaponSettingsGlobal.boltScript))
                 weaponSettingsGlobal.toggleBoltScript = true;
             ImGui::Spacing();
-            if (ImGui::Checkbox("Knife Reach", &weaponSettingsGlobal.knifeReach))
-                weaponSettingsGlobal.toggleKnifeReach = true;
+
+            uintptr_t knifePtr = GetPointer(baseAddress, offsets::Knife);
+            if (knifePtr && knifePtr > 0x10000) 
+            {
+                Knife* knife = reinterpret_cast<Knife*>(knifePtr);
+
+                if ((knife->knifeDistancePlayers > 1.2 && knife->knifeDistancePlayers < 1.4) ||
+                    knife->knifeDistancePlayers == 9999 &&
+                    (knife->knifeDistanceWalls >= 1.2 && knife->knifeDistanceWalls < 1.4 ||
+                        knife->knifeDistanceWalls == 9999))
+                {
+                    ImGui::Checkbox("Knife Reach", &weaponSettingsGlobal.knifeReach);
+                    if (ImGui::IsItemHovered())
+                        ImGui::SetTooltip("Turn this OFF before the game ends! Crashes occur otherwise.");
+                }
+
+                else 
+                {
+                    if (ImGui::Checkbox("Knife Reach", &knifeReachBugged)) 
+                        knifeReachBugged = false;
+                    if (ImGui::IsItemHovered()) 
+                        ImGui::SetTooltip("This feature is unavailable right now.\n\nWant to know why? Go to the README on github.");
+                }
+            }
+            else 
+            {
+                if (ImGui::Checkbox("Knife Reach", &knifeReachBugged)) 
+                    knifeReachBugged = false;
+                if (ImGui::IsItemHovered()) 
+                    ImGui::SetTooltip("This feature is unavailable right now.\n\nWant to know why? Go to the README on github.");
+            }
+
             ImGui::Spacing();
             ImGui::Text("Spread Reduction Percentage");
             ImGui::SliderInt("##Spread Slider", &weaponSettingsMap[displayWeaponName].spreadReduction, 0, 100);
@@ -164,7 +196,7 @@ void RenderGUI()
         if (ImGui::BeginTabItem("VISUAL"))
         {
             ImGui::Spacing();
-            if (ImGui::Checkbox("Glow ESP", &weaponSettingsGlobal.glowESP)) // not implemented yet
+            if (ImGui::Checkbox("Glow ESP", &weaponSettingsGlobal.glowESP))
                 weaponSettingsGlobal.toggleGlowESP = true;
             ImGui::Spacing();
             ImGui::Checkbox("Remove Sky", &removeSky);

@@ -43,7 +43,6 @@ struct WeaponSettingsGlobal
 	bool toggleRunShoot = false;
 	bool toggleGlowESP = false;
 	bool toggleBoltScript = false;
-	bool toggleKnifeReach = false;
 	bool toggleGoOutside = false;
 	bool toggleLockWave = false;
 	bool toggleInfGadgets = false;

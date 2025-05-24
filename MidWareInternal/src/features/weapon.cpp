@@ -160,3 +160,33 @@ void restoreInstaKill(const std::wstring& weaponName)
         currentWeapon->GunDamage = weaponSettingsMap[weaponName].originalDamageValue;
     }
 }
+
+void knifeReach()
+{
+    uintptr_t knifePtr = GetPointer(baseAddress, offsets::Knife);
+    if (!knifePtr || knifePtr < 0x10000)
+        return;
+
+    Knife* knife = reinterpret_cast<Knife*>(knifePtr);
+
+    if (knife->knifeDistancePlayers >= 1.2f && knife->knifeDistanceWalls >= 1.2f)
+    {
+        knife->knifeDistancePlayers = 9999.0f;
+        knife->knifeDistanceWalls = 9999.0f;
+    }
+}
+
+void restoreKnifeReach()
+{
+    uintptr_t knifePtr = GetPointer(baseAddress, offsets::Knife);
+    if (!knifePtr || knifePtr < 0x10000)
+        return;
+
+    Knife* knife = reinterpret_cast<Knife*>(knifePtr);
+
+    if (knife->knifeDistancePlayers == 9999.0f)
+    {
+        knife->knifeDistancePlayers = 1.299999952f;
+        knife->knifeDistanceWalls = 1.299999952f;
+    }
+}
