@@ -11,7 +11,7 @@ int APIENTRY WinMain(
     // ------------------------------------------------------------------------- \\ 
 
     // std::string dllPath = GetDLLPath();
-    std::string dllPath = GetCurrentDirectoryPath() + "\\MidWare.dll";
+    std::string dllPath = GetCurrentDirectoryPath() + "\\recourses\\MidWare.dll";
     if (dllPath.empty())
     {
         return 1;
@@ -25,7 +25,7 @@ int APIENTRY WinMain(
         return 1;
     }
 
-    std::string pythonScriptPath = GetCurrentDirectoryPath() + "\\ocr.exe";
+    std::string pythonScriptPath = GetCurrentDirectoryPath() + "\\recourses\\ocr.exe";
     PROCESS_INFORMATION pythonProc = StartExecutable(pythonScriptPath);
 
     // ------------------------------------------------------------------------- \\

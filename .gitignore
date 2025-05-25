@@ -364,3 +364,6 @@ FodyWeavers.xsd
 
 # Output directories
 **/build/
+
+# MidWare directory
+**/MidWare/

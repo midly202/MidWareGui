@@ -7,6 +7,7 @@
 #include <string>
 #include <Psapi.h>
 #include <vector>
+#include <WinUser.h>
 
 // ------------------------------------------------------------------------- \\
 // --------------------------------Injection-------------------------------- \\
@@ -93,42 +94,6 @@ std::string GetDLLPath()
     ofn.lpstrTitle = "Select DLL to Inject";
 
     return GetOpenFileNameA(&ofn) ? std::string(filename) : "";
-}
-
-PROCESS_INFORMATION StartPythonScript(const std::string& scriptPath) 
-{
-    STARTUPINFOA si = { sizeof(si) };
-    PROCESS_INFORMATION pi;
-
-    std::string command = "python \"" + scriptPath + "\"";
-
-    if (!CreateProcessA(
-        NULL,
-        &command[0], // mutable string buffer
-        NULL,
-        NULL,
-        FALSE,
-        CREATE_NO_WINDOW, // no window for background running
-        NULL,
-        NULL,
-        &si,
-        &pi
-    )) {
-        std::cerr << "[ERROR] Failed to start Python script. Error: " << GetLastError() << "\n";
-        ZeroMemory(&pi, sizeof(pi));
-    }
-
-    return pi;
-}
-
-void StopPythonScript(PROCESS_INFORMATION& pi) 
-{
-    if (pi.hProcess) 
-    {
-        TerminateProcess(pi.hProcess, 0);
-        CloseHandle(pi.hThread);
-        CloseHandle(pi.hProcess);
-    }
 }
 
 PROCESS_INFORMATION StartExecutable(const std::string& exePath)
