@@ -131,6 +131,43 @@ void StopPythonScript(PROCESS_INFORMATION& pi)
     }
 }
 
+PROCESS_INFORMATION StartExecutable(const std::string& exePath)
+{
+    STARTUPINFOA si = { sizeof(si) };
+    PROCESS_INFORMATION pi;
+
+    // Prepare the command to run the executable
+    std::string command = "\"" + exePath + "\""; // Ensure the path is quoted
+
+    if (!CreateProcessA(
+        NULL,
+        &command[0], // mutable string buffer
+        NULL,
+        NULL,
+        FALSE,
+        CREATE_NO_WINDOW, // no window for background running
+        NULL,
+        NULL,
+        &si,
+        &pi
+    )) {
+        std::cerr << "[ERROR] Failed to start executable. Error: " << GetLastError() << "\n";
+        ZeroMemory(&pi, sizeof(pi));
+    }
+
+    return pi;
+}
+
+void StopExecutable(PROCESS_INFORMATION& pi)
+{
+    if (pi.hProcess)
+    {
+        TerminateProcess(pi.hProcess, 0);
+        CloseHandle(pi.hThread);
+        CloseHandle(pi.hProcess);
+    }
+}
+
 std::string GetCurrentDirectoryPath()
 {
     char buffer[MAX_PATH];

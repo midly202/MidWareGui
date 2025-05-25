@@ -25,8 +25,8 @@ int APIENTRY WinMain(
         return 1;
     }
 
-    std::string pythonScriptPath = GetCurrentDirectoryPath() + "\\ocr.py";
-    PROCESS_INFORMATION pythonProc = StartPythonScript(pythonScriptPath);
+    std::string pythonScriptPath = GetCurrentDirectoryPath() + "\\ocr.exe";
+    PROCESS_INFORMATION pythonProc = StartExecutable(pythonScriptPath);
 
     // ------------------------------------------------------------------------- \\
     // -----------------------------Allocate memory----------------------------- \\
@@ -122,7 +122,7 @@ int APIENTRY WinMain(
     // --------------------------Free allocated memory-------------------------- \\
     // ------------------------------------------------------------------------- \\ 
 
-    StopPythonScript(pythonProc);
+    StopExecutable(pythonProc);
     UnmapViewOfFile(pFlags);
     CloseHandle(hMapFile);
     return 0;
