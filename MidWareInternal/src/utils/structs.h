@@ -23,13 +23,13 @@ struct WeaponSettings
 	int8_t originalFiremodeValue = -1;
 	int32_t originalFirerateValue = -1;
 	int32_t originalDamageValue = -1;
+	float originalSpreadValue = -1.0f;
 
 	// toggles
 	bool infiniteAmmo = false;
 	bool noRecoil = false;
 	bool fullAuto = false;
 	bool rapidFire = false;
-	bool noSpread = false;
 	bool instaKill = false;
 	bool runAndShoot = false;
 	bool boltScript = false;

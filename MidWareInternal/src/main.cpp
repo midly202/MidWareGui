@@ -73,11 +73,16 @@ DWORD WINAPI CheatThread(LPVOID)
                 if (!currWeapon4Ptr || currWeapon4Ptr < 0x10000)
                     return 1;
 
+                uintptr_t currWeapon5Ptr = GetPointer(baseAddress, offsets::CCurrentWeapon5);
+                if (!currWeapon5Ptr || currWeapon5Ptr < 0x10000)
+                    return 1;
+
                 WeaponComponent* weaponComponent = reinterpret_cast<WeaponComponent*>(weaponPtr);
                 CCurrentWeaponCaliber* gunCaliber = reinterpret_cast<CCurrentWeaponCaliber*>(caliberPtr);
                 CCurrentWeapon2* currWeapon2 = reinterpret_cast<CCurrentWeapon2*>(currWeapon2Ptr);
                 CCurrentWeapon3* currWeapon3 = reinterpret_cast<CCurrentWeapon3*>(currWeapon3Ptr);
                 CCurrentWeapon4* currWeapon4 = reinterpret_cast<CCurrentWeapon4*>(currWeapon4Ptr);
+                CCurrentWeapon5* currWeapon5 = reinterpret_cast<CCurrentWeapon5*>(currWeapon5Ptr);
 
                 weaponSettingsMap[weaponName] = WeaponSettings();
 
@@ -87,6 +92,7 @@ DWORD WINAPI CheatThread(LPVOID)
                 settings.originalFiremodeValue = weaponComponent->gunFireMode;
                 settings.originalFirerateValue = currWeapon3->GunFireRate;
                 settings.originalDamageValue = currWeapon4->GunDamage;
+				settings.originalSpreadValue = currWeapon5->GunSpread;
                 settings.caliberIndex = MapCaliberIDToIndex(gunCaliber->GunCaliber);
             }
         }
@@ -128,6 +134,14 @@ DWORD WINAPI CheatThread(LPVOID)
                 knifeReach();
             else
 				restoreKnifeReach();
+
+            if (settings.spreadReduction)
+                noSpread(weaponName, settings.spreadReduction);
+            else
+                restoreSpread(weaponName);
+
+            if (settings.caliberIndex != 15)
+                caliberSelect(weaponName, settings.caliberIndex);
         }
 
         else
@@ -135,7 +149,6 @@ DWORD WINAPI CheatThread(LPVOID)
             weaponSettingsMap[weaponName].infiniteAmmo = false;
             weaponSettingsMap[weaponName].fullAuto = false;
             weaponSettingsMap[weaponName].rapidFire = false;
-            weaponSettingsMap[weaponName].noSpread = false;
             weaponSettingsMap[weaponName].instaKill = false;
             weaponSettingsMap[weaponName].noRecoil = false;
             weaponSettingsMap[weaponName].spreadReduction = 0;
