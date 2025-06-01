@@ -1,5 +1,7 @@
 #include "helpers.h"
 
+extern uintptr_t baseAddress;
+
 std::string WideToNarrow(const std::wstring& wstr)
 {
     if (wstr.empty()) return std::string();
@@ -136,4 +138,28 @@ int MapCaliberIDToIndex(uint32_t caliberID)
     default:
         return 15; // "Invalid Caliber"
     }
+}
+
+float getPlayerFOV()
+{
+    uintptr_t settingsPtr = GetPointer(baseAddress, offsets::Settings);
+
+    if (!settingsPtr || settingsPtr < 0x10000)
+        return 1.0f;
+
+    Settings* settings = reinterpret_cast<Settings*>(settingsPtr);
+
+    return settings->PlayerFOV;
+}
+
+float getGunFOV()
+{
+    uintptr_t settingsPtr = GetPointer(baseAddress, offsets::Settings);
+
+    if (!settingsPtr || settingsPtr < 0x10000)
+        return 1.0f;
+
+    Settings* settings = reinterpret_cast<Settings*>(settingsPtr);
+
+    return settings->GunFOV;
 }

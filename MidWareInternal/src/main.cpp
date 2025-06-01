@@ -1,5 +1,6 @@
 #include "features/weapon.h"
 #include "features/player.h"
+#include "features/visual.h"
 #include "hooks/hooks.h"
 #include "utils/helpers.h"
 
@@ -29,8 +30,8 @@ DWORD WINAPI CheatThread(LPVOID)
     system("cls");
     SetConsoleTitleA("MidWare Internal - Console");
     */
-    std::chrono::steady_clock::time_point weaponEmptyStartTime;
-    bool weaponEmptyHeld = false;
+    cheatSettings.playerFOV = getPlayerFOV();
+    cheatSettings.gunFOV = getGunFOV();
 
     while (!shouldUnload)
     {
@@ -214,7 +215,25 @@ DWORD WINAPI CheatThread(LPVOID)
             else
                 restoreKnifeReach();
 
+            if (cheatSettings.removeSky)
+                removeSky();
+            else
+                restoreSky();
+
 			setPlayerSpeed(cheatSettings.playerSpeed);
+            setPlayerFOV(cheatSettings.playerFOV);
+            setGunFOV(cheatSettings.gunFOV);
+
+            setCamFOV(cheatSettings.camFOV);
+            setCamClippingPlane(cheatSettings.camDistance);
+
+            setCamX(cheatSettings.camX);
+            setCamY(cheatSettings.camY);
+            setCamZ(cheatSettings.camZ);
+
+            setCamPitch(cheatSettings.camPitch);
+            setCamRoll(cheatSettings.camRoll);
+            setCamYaw(cheatSettings.camYaw);
         }
         else
         {

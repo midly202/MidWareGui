@@ -154,6 +154,7 @@
     <ClCompile Include="includes\kiero\minhook\src\hook.c" />
     <ClCompile Include="includes\kiero\minhook\src\trampoline.c" />
     <ClCompile Include="src\features\player.cpp" />
+    <ClCompile Include="src\features\visual.cpp" />
     <ClCompile Include="src\features\weapon.cpp" />
     <ClCompile Include="src\gui\gui.cpp" />
     <ClCompile Include="src\hooks\hooks.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="includes\kiero\minhook\src\hde\table64.h" />
     <ClInclude Include="includes\kiero\minhook\src\trampoline.h" />
     <ClInclude Include="src\features\player.h" />
+    <ClInclude Include="src\features\visual.h" />
     <ClInclude Include="src\features\weapon.h" />
     <ClInclude Include="src\gui\gui.h" />
     <ClInclude Include="src\hooks\hooks.h" />

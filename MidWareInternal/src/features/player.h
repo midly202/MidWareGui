@@ -5,3 +5,5 @@
 void noClip();
 
 void restoreNoClip();
+
+void setPlayerSpeed(float playerSpeed);

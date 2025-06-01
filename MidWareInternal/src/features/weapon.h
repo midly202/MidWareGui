@@ -33,5 +33,3 @@ void noSpread(const std::wstring& weaponName, int percentage);
 void restoreSpread(const std::wstring& weaponName);
 
 void caliberSelect(const std::wstring& weaponName, int caliber);
-
-void setPlayerSpeed(float playerSpeed);

@@ -1,7 +1,6 @@
 #pragma once
 #include <Windows.h>
 
-//I CAPITALIZED THE I SO ADJUST OLD CODE ACCORDINGLY
 struct InternalFlags
 {
 	bool glowESP;
@@ -53,6 +52,16 @@ struct CheatSettings
 	bool godMode = false;
 	bool noClip = false;
 	bool glowESP = false;
+	bool removeSky = false;
 	float playerSpeed = 1.0f;
-
+	float playerFOV = 1.0f;
+	float gunFOV = 1.0f;
+	float camFOV = 0.0f;
+	float camDistance = 0.0f;
+	float camX = 0.0f;
+	float camY = 0.0f;
+	float camZ = 0.0f;
+	float camPitch = 0.0f;
+	float camRoll = 0.0f;
+	float camYaw = 0.0f;
 };

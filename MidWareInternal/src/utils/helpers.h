@@ -33,3 +33,7 @@ MODULEINFO GetModuleInfo(const char* szModule);
 uintptr_t FindPattern(const char* module, const char* pattern, const char* mask);
 
 int MapCaliberIDToIndex(uint32_t caliberID);
+
+float getPlayerFOV();
+
+float getGunFOV();

@@ -1,4 +1,5 @@
 #include "../utils/helpers.h"
+#include "../features/visual.h"
 #include "gui.h"
 #include "imgui.h"
 #include "imgui_impl_dx11.h"
@@ -52,13 +53,7 @@ void RenderGUI()
         " "
     };
 
-    static bool playerSpeed = false;
     static bool infiniteGadgets = false;
-
-    static bool fisheyeFOV = false;
-    static bool removeSky = false;
-    static bool thirdPerson = false;
-
     static bool droneNoGravity = false;
     static bool droneSpeed = false;
     static bool canJump = false;
@@ -195,24 +190,37 @@ void RenderGUI()
             if (ImGui::Checkbox("Glow ESP", &cheatSettings.glowESP))
                 cheatSettings.toggleGlowESP = true;
             ImGui::Spacing();
-            ImGui::Checkbox("Remove Sky", &removeSky);
+            ImGui::Checkbox("Remove Sky", &cheatSettings.removeSky);
             ImGui::Spacing();
-            ImGui::Text("FOV");
-            static float sliderFOV = 1.3f;
-            ImGui::SliderFloat("##FOV Slider", &sliderFOV, 1.0f, 5.0f);
-            static float sliderGunFOV = 1.7f;
-            ImGui::SliderFloat("##GunFOV Slider", &sliderGunFOV, 1.0f, 5.0f);
+            ImGui::Text("Player FOV");
+            ImGui::SliderFloat("##FOV Slider", &cheatSettings.playerFOV, 1.0f, 3.0f);
+            ImGui::Text("Weapon FOV");
+            ImGui::SliderFloat("##GunFOV Slider", &cheatSettings.gunFOV, 0.0f, 5.0f);
             ImGui::Spacing();
-            ImGui::Text("Camera Offsets");
-            static float sliderCamPosX = 0.0f;
-            ImGui::SliderFloat("##CamX Slider", &sliderCamPosX, 0.0f, 10.0f);
-            static float sliderCamPosY = 0.0f;
-            ImGui::SliderFloat("##CamY Slider", &sliderCamPosY, 0.0f, 10.0f);
-            static float sliderCamPosZ = 0.0f;
-            ImGui::SliderFloat("##CamZ Slider", &sliderCamPosZ, 0.0f, 10.0f);
-            static float sliderCamPosA = 0.0f;
-            ImGui::SliderFloat("##CamA Slider", &sliderCamPosA, 0.0f, 10.0f);
-            ImGui::Spacing();
+            if (ImGui::TreeNode("Camera Settings"))
+            {
+                if (ImGui::Button("Reset Settings"))
+                    camReset();
+                ImGui::Spacing();
+                ImGui::Text("Position");
+                ImGui::SliderFloat("##CamX", &cheatSettings.camX, -5.0f, 5.0f);
+                ImGui::SliderFloat("##CamY", &cheatSettings.camY, -5.0f, 5.0f);
+                ImGui::SliderFloat("##CamZ", &cheatSettings.camZ, -5.0f, 5.0f);
+                ImGui::Spacing();
+                ImGui::Text("Orientation");
+                ImGui::SliderFloat("##CamPitch", &cheatSettings.camPitch, -1.0f, 1.0f);
+                ImGui::SliderFloat("##CamRoll", &cheatSettings.camRoll, -1.0f, 1.0f);
+                ImGui::SliderFloat("##CamYaw", &cheatSettings.camYaw, -1.0f, 1.0f);
+                ImGui::Spacing();
+                ImGui::Text("Near Clipping Plane");
+                ImGui::SliderFloat("##CamClip", &cheatSettings.camDistance, 0.0f, 50.0f);
+                ImGui::Spacing();
+                ImGui::Text("Camera FOV");
+                ImGui::SliderFloat("##CamFOV", &cheatSettings.camFOV, -1.0f, 1.0f);
+                
+                ImGui::TreePop();
+            }
+            //ImGui::Spacing();
             ImGui::EndTabItem();
         }
 
