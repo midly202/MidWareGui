@@ -38,7 +38,7 @@ struct WeaponSettings
 	int caliberIndex = 15; // Unknown Caliber
 };
 
-struct WeaponSettingsGlobal
+struct CheatSettings
 {
 	bool toggleRunShoot = false;
 	bool toggleGlowESP = false;
@@ -50,5 +50,9 @@ struct WeaponSettingsGlobal
 	bool knifeReach = false;
 	bool runShoot = false;
 	bool boltScript = false;
+	bool godMode = false;
+	bool noClip = false;
 	bool glowESP = false;
+	float playerSpeed = 1.0f;
+
 };

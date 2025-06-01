@@ -1,4 +1,5 @@
 #include "features/weapon.h"
+#include "features/player.h"
 #include "hooks/hooks.h"
 #include "utils/helpers.h"
 
@@ -11,11 +12,13 @@ InternalFlags* pFlags = (InternalFlags*)MapViewOfFile(hMapFile, FILE_MAP_ALL_ACC
 
 std::unordered_map<std::wstring, WeaponSettings> weaponSettingsMap;
 
-WeaponSettingsGlobal weaponSettingsGlobal;
+CheatSettings cheatSettings;
 
 std::wstring weaponName = L"";
 std::wstring lastWeaponName = L"";
 std::wstring displayWeaponName = L"";
+
+int32_t originalSpeed = 0;
 
 DWORD WINAPI CheatThread(LPVOID)
 {
@@ -130,11 +133,6 @@ DWORD WINAPI CheatThread(LPVOID)
             else
                 restoreInstaKill(weaponName);
 
-            if (weaponSettingsGlobal.knifeReach)
-                knifeReach();
-            else
-				restoreKnifeReach();
-
             if (settings.spreadReduction)
                 noSpread(weaponName, settings.spreadReduction);
             else
@@ -155,34 +153,34 @@ DWORD WINAPI CheatThread(LPVOID)
             weaponSettingsMap[weaponName].caliberIndex = 15;
         }
 
-        if (weaponSettingsGlobal.toggleRunShoot)
+        if (cheatSettings.toggleRunShoot)
         {
             pFlags->runShoot = true;
-            weaponSettingsGlobal.toggleRunShoot = false;
+            cheatSettings.toggleRunShoot = false;
         }
 
-        if (weaponSettingsGlobal.toggleGlowESP)
+        if (cheatSettings.toggleGlowESP)
         {
             pFlags->glowESP = true;
-            weaponSettingsGlobal.toggleGlowESP = false;
+            cheatSettings.toggleGlowESP = false;
         }
 
-        if (weaponSettingsGlobal.toggleBoltScript)
+        if (cheatSettings.toggleBoltScript)
         {
             pFlags->boltScript = true;
-            weaponSettingsGlobal.toggleBoltScript = false;
+            cheatSettings.toggleBoltScript = false;
         }
 
-        if (weaponSettingsGlobal.toggleGoOutside)
+        if (cheatSettings.toggleGoOutside)
         {
             pFlags->goOutside = true;
-            weaponSettingsGlobal.toggleGoOutside = false;
+            cheatSettings.toggleGoOutside = false;
         }
 
-        if (weaponSettingsGlobal.toggleInfGadgets)
+        if (cheatSettings.toggleInfGadgets)
         {
             pFlags->infGadget = true;
-            weaponSettingsGlobal.toggleInfGadgets = false;
+            cheatSettings.toggleInfGadgets = false;
         }
 
         /*
@@ -190,15 +188,39 @@ DWORD WINAPI CheatThread(LPVOID)
         This is required as leaving knife distance on a non-default value will cause the game to crash when switching sessions.
 		Health is used as it's the first memory to be unloaded when switching sessions.
         */
+        int32_t originalHealth = 100;
         uintptr_t healthPtr = GetPointer(baseAddress, offsets::GodMode);
         if (healthPtr && healthPtr > 0x10000)
         {
             Health* health = reinterpret_cast<Health*>(healthPtr);
+            if (health->Health < 1000)
+			    originalHealth = health->Health;
+
             if (!health->Health)
-                weaponSettingsGlobal.knifeReach = false;
+                cheatSettings.knifeReach = false;
+
+            if (cheatSettings.godMode)
+                health->Health = 9999;
+            else
+				health->Health = originalHealth;
+
+            if (cheatSettings.noClip)
+                noClip();
+            else
+                restoreNoClip();
+
+            if (cheatSettings.knifeReach && health->Health) // set default values if health is zero
+                knifeReach();
+            else
+                restoreKnifeReach();
+
+			setPlayerSpeed(cheatSettings.playerSpeed);
         }
         else
-			weaponSettingsGlobal.knifeReach = false;
+        {
+            restoreKnifeReach(); // set default values if health is invalid
+            originalSpeed = 0;
+        }
     }
 
     /*

@@ -28,7 +28,7 @@ void RenderGUI()
     extern std::wstring displayWeaponName;
 
     extern uintptr_t baseAddress;
-    extern WeaponSettingsGlobal weaponSettingsGlobal;
+    extern CheatSettings cheatSettings;
 
     bool knifeReachBugged = false;
 
@@ -52,9 +52,7 @@ void RenderGUI()
         " "
     };
 
-    static bool godMode = false;
     static bool playerSpeed = false;
-    static bool noClip = false;
     static bool infiniteGadgets = false;
 
     static bool fisheyeFOV = false;
@@ -114,13 +112,13 @@ void RenderGUI()
             ImGui::Spacing();
             ImGui::Checkbox("InstaKill", &weaponSettingsMap[displayWeaponName].instaKill);
             ImGui::Spacing();
-            if (ImGui::Checkbox("Run & Shoot", &weaponSettingsGlobal.runShoot))
-                weaponSettingsGlobal.toggleRunShoot = true;
+            if (ImGui::Checkbox("Run & Shoot", &cheatSettings.runShoot))
+                cheatSettings.toggleRunShoot = true;
             ImGui::Spacing();
-            if (ImGui::Checkbox("Bolt Script", &weaponSettingsGlobal.boltScript))
-                weaponSettingsGlobal.toggleBoltScript = true;
+            if (ImGui::Checkbox("Bolt Script", &cheatSettings.boltScript))
+                cheatSettings.toggleBoltScript = true;
             ImGui::Spacing();
-
+            /*
             uintptr_t knifePtr = GetPointer(baseAddress, offsets::Knife);
             if (knifePtr && knifePtr > 0x10000) 
             {
@@ -130,7 +128,7 @@ void RenderGUI()
                     knife->knifeDistancePlayers == 9999 &&
                     (knife->knifeDistanceWalls >= 1.2 && knife->knifeDistanceWalls < 1.4 ||
                         knife->knifeDistanceWalls == 9999))
-                    ImGui::Checkbox("Knife Reach", &weaponSettingsGlobal.knifeReach);
+                    ImGui::Checkbox("Knife Reach", &cheatSettings.knifeReach);
 
                 else 
                 {
@@ -147,7 +145,10 @@ void RenderGUI()
                 if (ImGui::IsItemHovered()) 
                     ImGui::SetTooltip("This feature is unavailable right now.\n\nWant to know why? Go to the README on github.");
             }
-
+            */
+            ImGui::Checkbox("Knife Reach", &cheatSettings.knifeReach);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("This feature is unstable and will not work in some game sessions.");
             ImGui::Spacing();
             ImGui::Text("Spread Reduction Percentage");
             ImGui::SliderInt("##Spread Slider", &weaponSettingsMap[displayWeaponName].spreadReduction, 0, 100);
@@ -174,16 +175,15 @@ void RenderGUI()
         if (ImGui::BeginTabItem("PLAYER"))
         {
             ImGui::Spacing();
-            ImGui::Checkbox("God Mode", &godMode);
+            ImGui::Checkbox("God Mode", &cheatSettings.godMode);
             ImGui::Spacing();
-            ImGui::Checkbox("NoClip", &noClip);
+            ImGui::Checkbox("NoClip", &cheatSettings.noClip);
             ImGui::Spacing();
             if (ImGui::Checkbox("Infinite Gadgets", &infiniteGadgets))
-                weaponSettingsGlobal.toggleInfGadgets = true;
+                cheatSettings.toggleInfGadgets = true;
             ImGui::Spacing();
             ImGui::Text("Player Speed Multiplier");
-            static float sliderSpeed = 1.0f;
-            ImGui::SliderFloat("##Speed Slider", &sliderSpeed, 1.0f, 5.0f);
+            ImGui::SliderFloat("##Speed Slider", &cheatSettings.playerSpeed, 1.0f, 5.0f);
             ImGui::Spacing();
             ImGui::EndTabItem();
         }
@@ -192,8 +192,8 @@ void RenderGUI()
         if (ImGui::BeginTabItem("VISUAL"))
         {
             ImGui::Spacing();
-            if (ImGui::Checkbox("Glow ESP", &weaponSettingsGlobal.glowESP))
-                weaponSettingsGlobal.toggleGlowESP = true;
+            if (ImGui::Checkbox("Glow ESP", &cheatSettings.glowESP))
+                cheatSettings.toggleGlowESP = true;
             ImGui::Spacing();
             ImGui::Checkbox("Remove Sky", &removeSky);
             ImGui::Spacing();
@@ -243,10 +243,10 @@ void RenderGUI()
         {
             ImGui::Spacing();
             if (ImGui::Checkbox("Lock Wave", &lockWave)) // not implemented yet
-                weaponSettingsGlobal.toggleLockWave = true;
+                cheatSettings.toggleLockWave = true;
             ImGui::Spacing();
             if (ImGui::Checkbox("Can Go Outside", &canGoOutside))
-                weaponSettingsGlobal.toggleGoOutside = true;
+                cheatSettings.toggleGoOutside = true;
             ImGui::Spacing();
             ImGui::EndTabItem();
         }

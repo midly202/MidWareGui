@@ -1,10 +1,7 @@
 #include "../utils/helpers.h"
 #include "weapon.h"
 
-
-CCurrentWeapon6* currentWeapon6;
 extern uintptr_t baseAddress;
-extern bool shouldExit;
 
 std::wstring readWeaponData()
 {
@@ -258,4 +255,23 @@ void caliberSelect(const std::wstring& weaponName, int caliber)
     }
 
     gunCaliber->GunCaliber = caliberID;
+}
+
+void setPlayerSpeed(float playerSpeedMultiplier)
+{
+    extern int32_t originalSpeed;
+
+    if (playerSpeedMultiplier < 0.1f || playerSpeedMultiplier > 5.0f)
+        return;
+
+    uintptr_t playerPtr = GetPointer(baseAddress, offsets::CPlayer);
+    if (!playerPtr || playerPtr < 0x10000)
+        return;
+
+    CPlayer* player = reinterpret_cast<CPlayer*>(playerPtr);
+
+    if (originalSpeed == 0)
+        originalSpeed = player->PlayerSpeed;
+
+    player->PlayerSpeed = static_cast<int32_t>(originalSpeed * playerSpeedMultiplier);
 }
