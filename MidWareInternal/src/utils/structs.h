@@ -43,7 +43,6 @@ struct CheatSettings
 	bool toggleGlowESP = false;
 	bool toggleBoltScript = false;
 	bool toggleGoOutside = false;
-	bool toggleLockWave = false;
 	bool toggleInfGadgets = false;
 
 	bool knifeReach = false;
@@ -53,6 +52,8 @@ struct CheatSettings
 	bool noClip = false;
 	bool glowESP = false;
 	bool removeSky = false;
+	bool lockWave = false;
+	bool infiniteTime = false;
 	float playerSpeed = 1.0f;
 	float playerFOV = 1.0f;
 	float gunFOV = 1.0f;

@@ -23,6 +23,7 @@ namespace offsets
 	extern std::vector<uintptr_t> Drone2;
 	extern std::vector<uintptr_t> Drone3;
 	extern std::vector<uintptr_t> THuntWave;
+	extern std::vector<uintptr_t> RoundManager;
 }
 
 // Created with ReClass.NET 1.2 by KN4CK3R
@@ -229,10 +230,14 @@ public:
 	char pad_2350[496]; //0x2350
 }; //Size: 0x2540
 
-class CThuntWave
+class CThuntWave // actually just gamemanager but cba renaming it
 {
 public:
-	char pad_0000[1976]; //0x0000
+	char pad_0000[80]; //0x0000
+	int8_t gameState; //0x0050
+	char pad_0051[1895]; //0x0051
 	int32_t CurrentWave; //0x07B8
-	char pad_07BC[2180]; //0x07BC
+	char pad_07BC[1076]; //0x07BC
+	int32_t infTime; //0x0BF0
+	char pad_0BF4[1100]; //0x0BF4
 }; //Size: 0x1040

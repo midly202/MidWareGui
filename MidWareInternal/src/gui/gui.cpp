@@ -1,5 +1,6 @@
 #include "../utils/helpers.h"
 #include "../features/visual.h"
+#include "../features/thunt.h"
 #include "gui.h"
 #include "imgui.h"
 #include "imgui_impl_dx11.h"
@@ -60,8 +61,6 @@ void RenderGUI()
     static bool droneRange = false;
     static bool droneRapidFire = false;
     static bool droneAmmo = false;
-
-    static bool lockWave = false;
     static bool canGoOutside = false;
 
     // === MidWare ===
@@ -247,11 +246,18 @@ void RenderGUI()
         }
 
         // --- T-HUNT Tab ---
-        if (ImGui::BeginTabItem("T-HUNT"))
+        if (ImGui::BeginTabItem("MISC"))
         {
             ImGui::Spacing();
-            if (ImGui::Checkbox("Lock Wave", &lockWave)) // not implemented yet
-                cheatSettings.toggleLockWave = true;
+            if (ImGui::Button("End Round"))
+                gameState(5);
+            ImGui::Spacing();
+            if (ImGui::Button("End Match"))
+                gameState(2);
+            ImGui::Spacing();
+            ImGui::Checkbox("Infinite Time", &cheatSettings.infiniteTime);
+            ImGui::Spacing();
+            ImGui::Checkbox("Lock Wave", &cheatSettings.lockWave);
             ImGui::Spacing();
             if (ImGui::Checkbox("Can Go Outside", &canGoOutside))
                 cheatSettings.toggleGoOutside = true;

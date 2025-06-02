@@ -1,6 +1,7 @@
 #include "features/weapon.h"
 #include "features/player.h"
 #include "features/visual.h"
+#include "features/thunt.h"
 #include "hooks/hooks.h"
 #include "utils/helpers.h"
 
@@ -184,6 +185,11 @@ DWORD WINAPI CheatThread(LPVOID)
             cheatSettings.toggleInfGadgets = false;
         }
 
+        if (cheatSettings.infiniteTime)
+            infiniteTime(true);
+        else
+            infiniteTime(false);
+
         /*
         If health is 0 or invalid, disable knife reach (write the default values). 
         This is required as leaving knife distance on a non-default value will cause the game to crash when switching sessions.
@@ -234,6 +240,9 @@ DWORD WINAPI CheatThread(LPVOID)
             setCamPitch(cheatSettings.camPitch);
             setCamRoll(cheatSettings.camRoll);
             setCamYaw(cheatSettings.camYaw);
+
+            if (cheatSettings.lockWave)
+                lockWave();
         }
         else
         {
