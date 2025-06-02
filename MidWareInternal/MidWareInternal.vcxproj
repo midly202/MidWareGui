@@ -153,6 +153,7 @@
     <ClCompile Include="includes\kiero\minhook\src\hde\hde64.c" />
     <ClCompile Include="includes\kiero\minhook\src\hook.c" />
     <ClCompile Include="includes\kiero\minhook\src\trampoline.c" />
+    <ClCompile Include="src\features\drone.cpp" />
     <ClCompile Include="src\features\player.cpp" />
     <ClCompile Include="src\features\thunt.cpp" />
     <ClCompile Include="src\features\visual.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="includes\kiero\minhook\src\hde\table32.h" />
     <ClInclude Include="includes\kiero\minhook\src\hde\table64.h" />
     <ClInclude Include="includes\kiero\minhook\src\trampoline.h" />
+    <ClInclude Include="src\features\drone.h" />
     <ClInclude Include="src\features\player.h" />
     <ClInclude Include="src\features\thunt.h" />
     <ClInclude Include="src\features\visual.h" />

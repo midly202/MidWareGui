@@ -1,6 +1,7 @@
 #include "features/weapon.h"
 #include "features/player.h"
 #include "features/visual.h"
+#include "features/drone.h"
 #include "features/thunt.h"
 #include "hooks/hooks.h"
 #include "utils/helpers.h"
@@ -190,11 +191,6 @@ DWORD WINAPI CheatThread(LPVOID)
         else
             infiniteTime(false);
 
-        /*
-        If health is 0 or invalid, disable knife reach (write the default values). 
-        This is required as leaving knife distance on a non-default value will cause the game to crash when switching sessions.
-		Health is used as it's the first memory to be unloaded when switching sessions.
-        */
         int32_t originalHealth = 100;
         uintptr_t healthPtr = GetPointer(baseAddress, offsets::GodMode);
         if (healthPtr && healthPtr > 0x10000)
@@ -248,6 +244,36 @@ DWORD WINAPI CheatThread(LPVOID)
         {
             restoreKnifeReach(); // set default values if health is invalid
             originalSpeed = 0;
+        }
+
+        uintptr_t drone1Ptr = GetPointer(baseAddress, offsets::Drone1);
+        if (drone1Ptr && drone1Ptr > 0x10000)
+        {
+            CDrone1* drone1 = reinterpret_cast<CDrone1*>(drone1Ptr);
+
+            if (!cheatSettings.droneJump)
+                droneJump(true);
+            
+            else if (cheatSettings.droneJump && cheatSettings.toggleDroneJump)
+                droneJump(false);
+
+            if (cheatSettings.droneJumpCooldown)
+                droneJumpCooldown(true);
+            else
+                droneJumpCooldown(false);
+
+            if (cheatSettings.droneAmmo)
+                droneAmmo(true);
+            else
+                droneAmmo(false);
+
+            if (cheatSettings.droneRange)
+                droneRange(true);
+            else
+                droneRange(false);
+
+            droneGravity(cheatSettings.droneGravity);
+            droneSpeed(cheatSettings.droneSpeed);
         }
     }
 

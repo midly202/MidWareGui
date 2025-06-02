@@ -44,6 +44,7 @@ struct CheatSettings
 	bool toggleBoltScript = false;
 	bool toggleGoOutside = false;
 	bool toggleInfGadgets = false;
+	bool toggleDroneJump = false;
 
 	bool knifeReach = false;
 	bool runShoot = false;
@@ -54,6 +55,15 @@ struct CheatSettings
 	bool removeSky = false;
 	bool lockWave = false;
 	bool infiniteTime = false;
+
+	bool droneJump = false;
+	bool droneJumpCooldown = false;
+	bool droneAmmo = false;
+	bool droneRange = false;
+	bool droneRapidFire = false;
+	float droneGravity = 1.0f;
+	float droneSpeed = 1.0f;
+
 	float playerSpeed = 1.0f;
 	float playerFOV = 1.0f;
 	float gunFOV = 1.0f;

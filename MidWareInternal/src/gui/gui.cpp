@@ -54,14 +54,10 @@ void RenderGUI()
         " "
     };
 
-    static bool infiniteGadgets = false;
+    static bool infiniteGadgets = false;    // dont remove
+    static bool canGoOutside = false;       // dont remove
     static bool droneNoGravity = false;
     static bool droneSpeed = false;
-    static bool canJump = false;
-    static bool droneRange = false;
-    static bool droneRapidFire = false;
-    static bool droneAmmo = false;
-    static bool canGoOutside = false;
 
     // === MidWare ===
     static bool firstFrame = true;
@@ -227,20 +223,18 @@ void RenderGUI()
         if (ImGui::BeginTabItem("DRONE"))
         {
             ImGui::Spacing();
-            ImGui::Checkbox("Twitch Jump / No Cooldown", &canJump);
+            ImGui::Checkbox("Drone Jump", &cheatSettings.droneJump);
             ImGui::Spacing();
-            ImGui::Checkbox("Infinite Ammo", &droneAmmo);
+            ImGui::Checkbox("No Jump Cooldown", &cheatSettings.droneJumpCooldown);
             ImGui::Spacing();
-            ImGui::Checkbox("Infinite Range", &droneRange);
+            ImGui::Checkbox("Infinite Ammo", &cheatSettings.droneAmmo);
             ImGui::Spacing();
-            ImGui::Checkbox("Rapid Fire", &droneRapidFire);
+            ImGui::Checkbox("Infinite Range", &cheatSettings.droneRange);
             ImGui::Spacing();
             ImGui::Text("Drone Gravity");
-            static float sliderDroneGravity = 1.0f;
-            ImGui::SliderFloat("##Drone Gravity Slider", &sliderDroneGravity, 0.0f, 2.0f);
+            ImGui::SliderFloat("##Drone Gravity Slider", &cheatSettings.droneGravity, 0.01f, 2.0f);
             ImGui::Text("Drone Speed Multiplier");
-            static float sliderDroneSpeed = 1.0f;
-            ImGui::SliderFloat("##Drone Speed Slider", &sliderDroneSpeed, 1.0f, 5.0f);
+            ImGui::SliderFloat("##Drone Speed Slider", &cheatSettings.droneSpeed, 1.0f, 5.0f);
             ImGui::Spacing();
             ImGui::EndTabItem();
         }
